@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clip to OmniFocus Settings</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main class="settings">
+      <header class="settings__header">
+        <p class="settings__eyebrow">Clip to OmniFocus</p>
+        <h1>Defaults</h1>
+        <p class="settings__lede">
+          Clips go to your OmniFocus Inbox when the project field is left blank.
+          Project and tag names must match your database exactly.
+        </p>
+      </header>
+
+      <form class="settings__form" id="settings-form">
+        <label class="field">
+          <span class="field__label">Default project</span>
+          <input class="field__input" id="project" type="text" autocomplete="off" />
+        </label>
+
+        <label class="field">
+          <span class="field__label">Default tag</span>
+          <input class="field__input" id="tag" type="text" autocomplete="off" />
+        </label>
+
+        <label class="field">
+          <span class="field__label">Note template</span>
+          <textarea
+            class="field__textarea"
+            id="note-template"
+            rows="6"
+            spellcheck="false"
+            placeholder="{url}&#10;&#10;{excerpt}"
+          ></textarea>
+          <span class="field__hint">
+            Placeholders: <code>{url}</code>, <code>{title}</code>,
+            <code>{excerpt}</code>, <code>{selection}</code>. Leave blank to use
+            the built-in format.
+          </span>
+        </label>
+
+        <label class="checkbox">
+          <input type="checkbox" id="flag" />
+          <span>Flag clipped tasks by default</span>
+        </label>
+
+        <label class="checkbox">
+          <input type="checkbox" id="autosave" checked />
+          <span>Save clipped tasks immediately (recommended)</span>
+        </label>
+
+        <label class="checkbox">
+          <input type="checkbox" id="activate-omnifocus" />
+          <span>Switch to OmniFocus after clipping</span>
+        </label>
+
+        <label class="checkbox">
+          <input type="checkbox" id="reveal-new-item" />
+          <span>Reveal new item in OmniFocus after clipping</span>
+        </label>
+
+        <div class="settings__actions">
+          <button type="submit" class="button">Save settings</button>
+          <p class="settings__status" id="status" role="status" aria-live="polite"></p>
+        </div>
+      </form>
+
+      <section class="settings__help">
+        <h2>Requirements</h2>
+        <p>
+          <strong>Clip to OmniFocus</strong> requires
+          <strong>macOS</strong> and
+          <a href="https://www.omnigroup.com/omnifocus/" target="_blank" rel="noopener noreferrer"
+            >OmniFocus for Mac</a
+          >
+          installed. It is an unofficial extension and is not affiliated with or
+          endorsed by The Omni Group.
+        </p>
+        <p>
+          If clipping fails, confirm OmniFocus is installed and that Chrome is
+          allowed to open external applications when prompted.
+        </p>
+      </section>
+
+      <section class="settings__help">
+        <h2>Quick clip shortcuts</h2>
+        <ul>
+          <li><kbd>⌘</kbd><kbd>⇧</kbd><kbd>O</kbd> — clip current page</li>
+          <li><kbd>⌘</kbd><kbd>⇧</kbd><kbd>S</kbd> — clip selected text</li>
+        </ul>
+        <p>
+          You can also right-click a page or text selection and choose
+          <strong>Clip to OmniFocus</strong>.
+        </p>
+        <p>
+          Chrome may ask once to let <strong>Clip to OmniFocus</strong> open
+          OmniFocus. That approval covers every site — you do not need to allow
+          individual websites.
+        </p>
+      </section>
+    </main>
+
+    <script type="module" src="options.js"></script>
+  </body>
+</html>

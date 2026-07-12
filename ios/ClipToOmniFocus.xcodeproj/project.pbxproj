@@ -1,0 +1,462 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		02864651BA0ACA9477184811 /* ShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8C37C469010BDF20C70CE6E3 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		0A6AE0D4B2DE92E6ADEC0BB4 /* OmniFocusURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898F3E3CEEEFF3D79FBE3151 /* OmniFocusURL.swift */; };
+		226F6A68EFCFC5A60AA7297F /* ClipToOmniFocusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11015C9C57F2539EA106679F /* ClipToOmniFocusApp.swift */; };
+		6ADA744976E6CE8C40261B07 /* OmniFocusURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898F3E3CEEEFF3D79FBE3151 /* OmniFocusURL.swift */; };
+		6ECE3FBD502B80906CDC55B9 /* ClipStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD39F6871202F12EF6F33C6 /* ClipStore.swift */; };
+		816A86E355C71B17A5143F66 /* ClipStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD39F6871202F12EF6F33C6 /* ClipStore.swift */; };
+		E89504A8515CFEA351E2A286 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9F3E25234A907320C5FD38D /* ShareViewController.swift */; };
+		F5DD3A1172A7AC53304252BB /* preprocess.js in Resources */ = {isa = PBXBuildFile; fileRef = 79D387C477E80941AB6AC497 /* preprocess.js */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BB8534F3335478E65BB537E2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 92ECC4DAA3EB727EAE214D76 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 50D5B9954E7D374C9271D0C9;
+			remoteInfo = ShareExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8B70D2DF5C667DB5C7C66B87 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				02864651BA0ACA9477184811 /* ShareExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0C352C0D9EC7B9E3416CFCC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		0F634435809FE003E25FC6BB /* ClipToOmniFocus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ClipToOmniFocus.entitlements; sourceTree = "<group>"; };
+		11015C9C57F2539EA106679F /* ClipToOmniFocusApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipToOmniFocusApp.swift; sourceTree = "<group>"; };
+		2B1C8095AB5C65FF38CFAE88 /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
+		5DD39F6871202F12EF6F33C6 /* ClipStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipStore.swift; sourceTree = "<group>"; };
+		63D02FDA2CB02BCE2E460470 /* ClipToOmniFocus.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ClipToOmniFocus.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		79D387C477E80941AB6AC497 /* preprocess.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = preprocess.js; sourceTree = "<group>"; };
+		898F3E3CEEEFF3D79FBE3151 /* OmniFocusURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OmniFocusURL.swift; sourceTree = "<group>"; };
+		8C37C469010BDF20C70CE6E3 /* ShareExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A294972EF754AB1251F00FDD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D9F3E25234A907320C5FD38D /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		25EB5F38A5D929006C78AFDA /* Share */ = {
+			isa = PBXGroup;
+			children = (
+				A294972EF754AB1251F00FDD /* Info.plist */,
+				79D387C477E80941AB6AC497 /* preprocess.js */,
+				2B1C8095AB5C65FF38CFAE88 /* ShareExtension.entitlements */,
+				D9F3E25234A907320C5FD38D /* ShareViewController.swift */,
+			);
+			path = Share;
+			sourceTree = "<group>";
+		};
+		AC1A31B04DEA5C70F8837F49 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				5DD39F6871202F12EF6F33C6 /* ClipStore.swift */,
+				898F3E3CEEEFF3D79FBE3151 /* OmniFocusURL.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		AD8BAE027A8ABC24F35EB577 = {
+			isa = PBXGroup;
+			children = (
+				AED8B5D229A5A197BA9FA324 /* App */,
+				25EB5F38A5D929006C78AFDA /* Share */,
+				AC1A31B04DEA5C70F8837F49 /* Shared */,
+				E7AF5A05433B4660D6564C52 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AED8B5D229A5A197BA9FA324 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				0F634435809FE003E25FC6BB /* ClipToOmniFocus.entitlements */,
+				11015C9C57F2539EA106679F /* ClipToOmniFocusApp.swift */,
+				0C352C0D9EC7B9E3416CFCC3 /* Info.plist */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		E7AF5A05433B4660D6564C52 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				63D02FDA2CB02BCE2E460470 /* ClipToOmniFocus.app */,
+				8C37C469010BDF20C70CE6E3 /* ShareExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		042ED1113EA9C1567527F4BD /* ClipToOmniFocus */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9AA149DB28808F29EA259B2 /* Build configuration list for PBXNativeTarget "ClipToOmniFocus" */;
+			buildPhases = (
+				1F205D99240C252258E0EDAD /* Sources */,
+				8B70D2DF5C667DB5C7C66B87 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EC8ADD81E837FEB0F9DA97B4 /* PBXTargetDependency */,
+			);
+			name = ClipToOmniFocus;
+			packageProductDependencies = (
+			);
+			productName = ClipToOmniFocus;
+			productReference = 63D02FDA2CB02BCE2E460470 /* ClipToOmniFocus.app */;
+			productType = "com.apple.product-type.application";
+		};
+		50D5B9954E7D374C9271D0C9 /* ShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 16E042DFC952F23DF681CC08 /* Build configuration list for PBXNativeTarget "ShareExtension" */;
+			buildPhases = (
+				005DBEE7CA998F594ED5A338 /* Sources */,
+				5CD89ADF75981B2AE000C362 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ShareExtension;
+			packageProductDependencies = (
+			);
+			productName = ShareExtension;
+			productReference = 8C37C469010BDF20C70CE6E3 /* ShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		92ECC4DAA3EB727EAE214D76 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					042ED1113EA9C1567527F4BD = {
+						DevelopmentTeam = 2386YZLWA2;
+						ProvisioningStyle = Automatic;
+					};
+					50D5B9954E7D374C9271D0C9 = {
+						DevelopmentTeam = 2386YZLWA2;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = EE376C14130B75724C796F25 /* Build configuration list for PBXProject "ClipToOmniFocus" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = AD8BAE027A8ABC24F35EB577;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = E7AF5A05433B4660D6564C52 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				042ED1113EA9C1567527F4BD /* ClipToOmniFocus */,
+				50D5B9954E7D374C9271D0C9 /* ShareExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5CD89ADF75981B2AE000C362 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F5DD3A1172A7AC53304252BB /* preprocess.js in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		005DBEE7CA998F594ED5A338 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6ECE3FBD502B80906CDC55B9 /* ClipStore.swift in Sources */,
+				6ADA744976E6CE8C40261B07 /* OmniFocusURL.swift in Sources */,
+				E89504A8515CFEA351E2A286 /* ShareViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1F205D99240C252258E0EDAD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				816A86E355C71B17A5143F66 /* ClipStore.swift in Sources */,
+				226F6A68EFCFC5A60AA7297F /* ClipToOmniFocusApp.swift in Sources */,
+				0A6AE0D4B2DE92E6ADEC0BB4 /* OmniFocusURL.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		EC8ADD81E837FEB0F9DA97B4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 50D5B9954E7D374C9271D0C9 /* ShareExtension */;
+			targetProxy = BB8534F3335478E65BB537E2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0563A2DF005DC1F97CB48BDA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = App/ClipToOmniFocus.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = App/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.spiralocean.cliptoomnifocus;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		3C75A071FD4B04B7FE3FE5F0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 2386YZLWA2;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		6834A4EBF0FC9EE07EA16B5C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Share/ShareExtension.entitlements;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Share/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.spiralocean.cliptoomnifocus.Share;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C3233346FF5D5E8DE124F6AE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 2386YZLWA2;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		F56B0A2AB7F27AAA1F568694 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Share/ShareExtension.entitlements;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Share/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.spiralocean.cliptoomnifocus.Share;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		FEFE96D86A2C5F80A840682E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = App/ClipToOmniFocus.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = App/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.spiralocean.cliptoomnifocus;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		16E042DFC952F23DF681CC08 /* Build configuration list for PBXNativeTarget "ShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6834A4EBF0FC9EE07EA16B5C /* Debug */,
+				F56B0A2AB7F27AAA1F568694 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A9AA149DB28808F29EA259B2 /* Build configuration list for PBXNativeTarget "ClipToOmniFocus" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FEFE96D86A2C5F80A840682E /* Debug */,
+				0563A2DF005DC1F97CB48BDA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		EE376C14130B75724C796F25 /* Build configuration list for PBXProject "ClipToOmniFocus" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C3233346FF5D5E8DE124F6AE /* Debug */,
+				3C75A071FD4B04B7FE3FE5F0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 92ECC4DAA3EB727EAE214D76 /* Project object */;
+}

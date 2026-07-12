@@ -1,0 +1,1033 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		89601A5D2FEA7A23008E17C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89601A5C2FEA7A23008E17C6 /* AppDelegate.swift */; };
+		89601A5F2FEA7A23008E17C6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89601A5E2FEA7A23008E17C6 /* SceneDelegate.swift */; };
+		89601A622FEA7A23008E17C6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89601A602FEA7A23008E17C6 /* LaunchScreen.storyboard */; };
+		89601A652FEA7A23008E17C6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89601A632FEA7A23008E17C6 /* Main.storyboard */; };
+		89601A6E2FEA7A23008E17C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89601A6D2FEA7A23008E17C6 /* AppDelegate.swift */; };
+		89601A712FEA7A23008E17C6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89601A6F2FEA7A23008E17C6 /* Main.storyboard */; };
+		89601A782FEA7A23008E17C6 /* Clip to OmniFocus Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 89601A772FEA7A23008E17C6 /* Clip to OmniFocus Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		89601A822FEA7A23008E17C6 /* Clip to OmniFocus Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 89601A812FEA7A23008E17C6 /* Clip to OmniFocus Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		89601A872FEA7A23008E17C6 /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = 89601A4C2FEA7A21008E17C6 /* Main.html */; };
+		89601A882FEA7A23008E17C6 /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = 89601A4C2FEA7A21008E17C6 /* Main.html */; };
+		89601A892FEA7A23008E17C6 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 89601A4E2FEA7A21008E17C6 /* Icon.png */; };
+		89601A8A2FEA7A23008E17C6 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 89601A4E2FEA7A21008E17C6 /* Icon.png */; };
+		89601A8B2FEA7A23008E17C6 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = 89601A4F2FEA7A21008E17C6 /* Style.css */; };
+		89601A8C2FEA7A23008E17C6 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = 89601A4F2FEA7A21008E17C6 /* Style.css */; };
+		89601A8D2FEA7A23008E17C6 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = 89601A502FEA7A21008E17C6 /* Script.js */; };
+		89601A8E2FEA7A23008E17C6 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = 89601A502FEA7A21008E17C6 /* Script.js */; };
+		89601A8F2FEA7A23008E17C6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89601A512FEA7A21008E17C6 /* ViewController.swift */; };
+		89601A902FEA7A23008E17C6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89601A512FEA7A21008E17C6 /* ViewController.swift */; };
+		89601A912FEA7A23008E17C6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89601A522FEA7A23008E17C6 /* Assets.xcassets */; };
+		89601A922FEA7A23008E17C6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89601A522FEA7A23008E17C6 /* Assets.xcassets */; };
+		89601A932FEA7A23008E17C6 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89601A542FEA7A23008E17C6 /* SafariWebExtensionHandler.swift */; };
+		89601A942FEA7A23008E17C6 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89601A542FEA7A23008E17C6 /* SafariWebExtensionHandler.swift */; };
+		89601AB12FEA7A24008E17C6 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = 89601AA62FEA7A24008E17C6 /* popup.js */; };
+		89601AB22FEA7A24008E17C6 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 89601AA72FEA7A24008E17C6 /* background.js */; };
+		89601AB32FEA7A24008E17C6 /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = 89601AA82FEA7A24008E17C6 /* popup.html */; };
+		89601AB42FEA7A24008E17C6 /* options.js in Resources */ = {isa = PBXBuildFile; fileRef = 89601AA92FEA7A24008E17C6 /* options.js */; };
+		89601AB52FEA7A24008E17C6 /* icons in Resources */ = {isa = PBXBuildFile; fileRef = 89601AAA2FEA7A24008E17C6 /* icons */; };
+		89601AB62FEA7A24008E17C6 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 89601AAB2FEA7A24008E17C6 /* manifest.json */; };
+		89601AB72FEA7A24008E17C6 /* options.html in Resources */ = {isa = PBXBuildFile; fileRef = 89601AAC2FEA7A24008E17C6 /* options.html */; };
+		89601AB82FEA7A24008E17C6 /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = 89601AAD2FEA7A24008E17C6 /* popup.css */; };
+		89601AB92FEA7A24008E17C6 /* handoff.html in Resources */ = {isa = PBXBuildFile; fileRef = 89601AAE2FEA7A24008E17C6 /* handoff.html */; };
+		89601ABA2FEA7A24008E17C6 /* options.css in Resources */ = {isa = PBXBuildFile; fileRef = 89601AAF2FEA7A24008E17C6 /* options.css */; };
+		89601ABB2FEA7A24008E17C6 /* src in Resources */ = {isa = PBXBuildFile; fileRef = 89601AB02FEA7A24008E17C6 /* src */; };
+		89601ABC2FEA7A24008E17C6 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = 89601AA62FEA7A24008E17C6 /* popup.js */; };
+		89601ABD2FEA7A24008E17C6 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 89601AA72FEA7A24008E17C6 /* background.js */; };
+		89601ABE2FEA7A24008E17C6 /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = 89601AA82FEA7A24008E17C6 /* popup.html */; };
+		89601ABF2FEA7A24008E17C6 /* options.js in Resources */ = {isa = PBXBuildFile; fileRef = 89601AA92FEA7A24008E17C6 /* options.js */; };
+		89601AC02FEA7A24008E17C6 /* icons in Resources */ = {isa = PBXBuildFile; fileRef = 89601AAA2FEA7A24008E17C6 /* icons */; };
+		89601AC12FEA7A24008E17C6 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 89601AAB2FEA7A24008E17C6 /* manifest.json */; };
+		89601AC22FEA7A24008E17C6 /* options.html in Resources */ = {isa = PBXBuildFile; fileRef = 89601AAC2FEA7A24008E17C6 /* options.html */; };
+		89601AC32FEA7A24008E17C6 /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = 89601AAD2FEA7A24008E17C6 /* popup.css */; };
+		89601AC42FEA7A24008E17C6 /* handoff.html in Resources */ = {isa = PBXBuildFile; fileRef = 89601AAE2FEA7A24008E17C6 /* handoff.html */; };
+		89601AC52FEA7A24008E17C6 /* options.css in Resources */ = {isa = PBXBuildFile; fileRef = 89601AAF2FEA7A24008E17C6 /* options.css */; };
+		89601AC62FEA7A24008E17C6 /* src in Resources */ = {isa = PBXBuildFile; fileRef = 89601AB02FEA7A24008E17C6 /* src */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		89601A792FEA7A23008E17C6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 89601A462FEA7A21008E17C6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 89601A762FEA7A23008E17C6;
+			remoteInfo = "Clip to OmniFocus Extension (iOS)";
+		};
+		89601A832FEA7A23008E17C6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 89601A462FEA7A21008E17C6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 89601A802FEA7A23008E17C6;
+			remoteInfo = "Clip to OmniFocus Extension (macOS)";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		89601A9A2FEA7A23008E17C6 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				89601A782FEA7A23008E17C6 /* Clip to OmniFocus Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89601AA12FEA7A23008E17C6 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				89601A822FEA7A23008E17C6 /* Clip to OmniFocus Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		89601A4D2FEA7A21008E17C6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = Base.lproj/Main.html; sourceTree = "<group>"; };
+		89601A4E2FEA7A21008E17C6 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		89601A4F2FEA7A21008E17C6 /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
+		89601A502FEA7A21008E17C6 /* Script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Script.js; sourceTree = "<group>"; };
+		89601A512FEA7A21008E17C6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		89601A522FEA7A23008E17C6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		89601A542FEA7A23008E17C6 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
+		89601A592FEA7A23008E17C6 /* Clip to OmniFocus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Clip to OmniFocus.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		89601A5C2FEA7A23008E17C6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		89601A5E2FEA7A23008E17C6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		89601A612FEA7A23008E17C6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		89601A642FEA7A23008E17C6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		89601A662FEA7A23008E17C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		89601A6B2FEA7A23008E17C6 /* Clip to OmniFocus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Clip to OmniFocus.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		89601A6D2FEA7A23008E17C6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		89601A702FEA7A23008E17C6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		89601A722FEA7A23008E17C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		89601A772FEA7A23008E17C6 /* Clip to OmniFocus Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Clip to OmniFocus Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		89601A7C2FEA7A23008E17C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		89601A812FEA7A23008E17C6 /* Clip to OmniFocus Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Clip to OmniFocus Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		89601A862FEA7A23008E17C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		89601AA62FEA7A24008E17C6 /* popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = popup.js; path = Resources/popup.js; sourceTree = "<group>"; };
+		89601AA72FEA7A24008E17C6 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = background.js; path = Resources/background.js; sourceTree = "<group>"; };
+		89601AA82FEA7A24008E17C6 /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = popup.html; path = Resources/popup.html; sourceTree = "<group>"; };
+		89601AA92FEA7A24008E17C6 /* options.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = options.js; path = Resources/options.js; sourceTree = "<group>"; };
+		89601AAA2FEA7A24008E17C6 /* icons */ = {isa = PBXFileReference; lastKnownFileType = folder; name = icons; path = Resources/icons; sourceTree = "<group>"; };
+		89601AAB2FEA7A24008E17C6 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = Resources/manifest.json; sourceTree = "<group>"; };
+		89601AAC2FEA7A24008E17C6 /* options.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = options.html; path = Resources/options.html; sourceTree = "<group>"; };
+		89601AAD2FEA7A24008E17C6 /* popup.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = popup.css; path = Resources/popup.css; sourceTree = "<group>"; };
+		89601AAE2FEA7A24008E17C6 /* handoff.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = handoff.html; path = Resources/handoff.html; sourceTree = "<group>"; };
+		89601AAF2FEA7A24008E17C6 /* options.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = options.css; path = Resources/options.css; sourceTree = "<group>"; };
+		89601AB02FEA7A24008E17C6 /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; name = src; path = Resources/src; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		89601A562FEA7A23008E17C6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89601A682FEA7A23008E17C6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89601A742FEA7A23008E17C6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89601A7E2FEA7A23008E17C6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		89601A452FEA7A21008E17C6 = {
+			isa = PBXGroup;
+			children = (
+				89601A4A2FEA7A21008E17C6 /* Shared (App) */,
+				89601A532FEA7A23008E17C6 /* Shared (Extension) */,
+				89601A5B2FEA7A23008E17C6 /* iOS (App) */,
+				89601A6C2FEA7A23008E17C6 /* macOS (App) */,
+				89601A7B2FEA7A23008E17C6 /* iOS (Extension) */,
+				89601A852FEA7A23008E17C6 /* macOS (Extension) */,
+				89601A5A2FEA7A23008E17C6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		89601A4A2FEA7A21008E17C6 /* Shared (App) */ = {
+			isa = PBXGroup;
+			children = (
+				89601A512FEA7A21008E17C6 /* ViewController.swift */,
+				89601A522FEA7A23008E17C6 /* Assets.xcassets */,
+				89601A4B2FEA7A21008E17C6 /* Resources */,
+			);
+			path = "Shared (App)";
+			sourceTree = "<group>";
+		};
+		89601A4B2FEA7A21008E17C6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				89601A4C2FEA7A21008E17C6 /* Main.html */,
+				89601A4E2FEA7A21008E17C6 /* Icon.png */,
+				89601A4F2FEA7A21008E17C6 /* Style.css */,
+				89601A502FEA7A21008E17C6 /* Script.js */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		89601A532FEA7A23008E17C6 /* Shared (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				89601AA52FEA7A24008E17C6 /* Resources */,
+				89601A542FEA7A23008E17C6 /* SafariWebExtensionHandler.swift */,
+			);
+			path = "Shared (Extension)";
+			sourceTree = "<group>";
+		};
+		89601A5A2FEA7A23008E17C6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				89601A592FEA7A23008E17C6 /* Clip to OmniFocus.app */,
+				89601A6B2FEA7A23008E17C6 /* Clip to OmniFocus.app */,
+				89601A772FEA7A23008E17C6 /* Clip to OmniFocus Extension.appex */,
+				89601A812FEA7A23008E17C6 /* Clip to OmniFocus Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		89601A5B2FEA7A23008E17C6 /* iOS (App) */ = {
+			isa = PBXGroup;
+			children = (
+				89601A5C2FEA7A23008E17C6 /* AppDelegate.swift */,
+				89601A5E2FEA7A23008E17C6 /* SceneDelegate.swift */,
+				89601A602FEA7A23008E17C6 /* LaunchScreen.storyboard */,
+				89601A632FEA7A23008E17C6 /* Main.storyboard */,
+				89601A662FEA7A23008E17C6 /* Info.plist */,
+			);
+			path = "iOS (App)";
+			sourceTree = "<group>";
+		};
+		89601A6C2FEA7A23008E17C6 /* macOS (App) */ = {
+			isa = PBXGroup;
+			children = (
+				89601A6D2FEA7A23008E17C6 /* AppDelegate.swift */,
+				89601A6F2FEA7A23008E17C6 /* Main.storyboard */,
+				89601A722FEA7A23008E17C6 /* Info.plist */,
+			);
+			path = "macOS (App)";
+			sourceTree = "<group>";
+		};
+		89601A7B2FEA7A23008E17C6 /* iOS (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				89601A7C2FEA7A23008E17C6 /* Info.plist */,
+			);
+			path = "iOS (Extension)";
+			sourceTree = "<group>";
+		};
+		89601A852FEA7A23008E17C6 /* macOS (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				89601A862FEA7A23008E17C6 /* Info.plist */,
+			);
+			path = "macOS (Extension)";
+			sourceTree = "<group>";
+		};
+		89601AA52FEA7A24008E17C6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				89601AA62FEA7A24008E17C6 /* popup.js */,
+				89601AA72FEA7A24008E17C6 /* background.js */,
+				89601AA82FEA7A24008E17C6 /* popup.html */,
+				89601AA92FEA7A24008E17C6 /* options.js */,
+				89601AAA2FEA7A24008E17C6 /* icons */,
+				89601AAB2FEA7A24008E17C6 /* manifest.json */,
+				89601AAC2FEA7A24008E17C6 /* options.html */,
+				89601AAD2FEA7A24008E17C6 /* popup.css */,
+				89601AAE2FEA7A24008E17C6 /* handoff.html */,
+				89601AAF2FEA7A24008E17C6 /* options.css */,
+				89601AB02FEA7A24008E17C6 /* src */,
+			);
+			name = Resources;
+			path = "Shared (Extension)";
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		89601A582FEA7A23008E17C6 /* Clip to OmniFocus (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 89601A9B2FEA7A23008E17C6 /* Build configuration list for PBXNativeTarget "Clip to OmniFocus (iOS)" */;
+			buildPhases = (
+				89601A552FEA7A23008E17C6 /* Sources */,
+				89601A562FEA7A23008E17C6 /* Frameworks */,
+				89601A572FEA7A23008E17C6 /* Resources */,
+				89601A9A2FEA7A23008E17C6 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				89601A7A2FEA7A23008E17C6 /* PBXTargetDependency */,
+			);
+			name = "Clip to OmniFocus (iOS)";
+			packageProductDependencies = (
+			);
+			productName = "Clip to OmniFocus (iOS)";
+			productReference = 89601A592FEA7A23008E17C6 /* Clip to OmniFocus.app */;
+			productType = "com.apple.product-type.application";
+		};
+		89601A6A2FEA7A23008E17C6 /* Clip to OmniFocus (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 89601AA22FEA7A23008E17C6 /* Build configuration list for PBXNativeTarget "Clip to OmniFocus (macOS)" */;
+			buildPhases = (
+				89601A672FEA7A23008E17C6 /* Sources */,
+				89601A682FEA7A23008E17C6 /* Frameworks */,
+				89601A692FEA7A23008E17C6 /* Resources */,
+				89601AA12FEA7A23008E17C6 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				89601A842FEA7A23008E17C6 /* PBXTargetDependency */,
+			);
+			name = "Clip to OmniFocus (macOS)";
+			packageProductDependencies = (
+			);
+			productName = "Clip to OmniFocus (macOS)";
+			productReference = 89601A6B2FEA7A23008E17C6 /* Clip to OmniFocus.app */;
+			productType = "com.apple.product-type.application";
+		};
+		89601A762FEA7A23008E17C6 /* Clip to OmniFocus Extension (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 89601A972FEA7A23008E17C6 /* Build configuration list for PBXNativeTarget "Clip to OmniFocus Extension (iOS)" */;
+			buildPhases = (
+				89601A732FEA7A23008E17C6 /* Sources */,
+				89601A742FEA7A23008E17C6 /* Frameworks */,
+				89601A752FEA7A23008E17C6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Clip to OmniFocus Extension (iOS)";
+			packageProductDependencies = (
+			);
+			productName = "Clip to OmniFocus Extension (iOS)";
+			productReference = 89601A772FEA7A23008E17C6 /* Clip to OmniFocus Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		89601A802FEA7A23008E17C6 /* Clip to OmniFocus Extension (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 89601A9E2FEA7A23008E17C6 /* Build configuration list for PBXNativeTarget "Clip to OmniFocus Extension (macOS)" */;
+			buildPhases = (
+				89601A7D2FEA7A23008E17C6 /* Sources */,
+				89601A7E2FEA7A23008E17C6 /* Frameworks */,
+				89601A7F2FEA7A23008E17C6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Clip to OmniFocus Extension (macOS)";
+			packageProductDependencies = (
+			);
+			productName = "Clip to OmniFocus Extension (macOS)";
+			productReference = 89601A812FEA7A23008E17C6 /* Clip to OmniFocus Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		89601A462FEA7A21008E17C6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2650;
+				LastUpgradeCheck = 2650;
+				TargetAttributes = {
+					89601A582FEA7A23008E17C6 = {
+						CreatedOnToolsVersion = 26.5;
+					};
+					89601A6A2FEA7A23008E17C6 = {
+						CreatedOnToolsVersion = 26.5;
+					};
+					89601A762FEA7A23008E17C6 = {
+						CreatedOnToolsVersion = 26.5;
+					};
+					89601A802FEA7A23008E17C6 = {
+						CreatedOnToolsVersion = 26.5;
+					};
+				};
+			};
+			buildConfigurationList = 89601A492FEA7A21008E17C6 /* Build configuration list for PBXProject "Clip to OmniFocus" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 89601A452FEA7A21008E17C6;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 89601A5A2FEA7A23008E17C6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				89601A582FEA7A23008E17C6 /* Clip to OmniFocus (iOS) */,
+				89601A6A2FEA7A23008E17C6 /* Clip to OmniFocus (macOS) */,
+				89601A762FEA7A23008E17C6 /* Clip to OmniFocus Extension (iOS) */,
+				89601A802FEA7A23008E17C6 /* Clip to OmniFocus Extension (macOS) */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		89601A572FEA7A23008E17C6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89601A892FEA7A23008E17C6 /* Icon.png in Resources */,
+				89601A622FEA7A23008E17C6 /* LaunchScreen.storyboard in Resources */,
+				89601A872FEA7A23008E17C6 /* Main.html in Resources */,
+				89601A8D2FEA7A23008E17C6 /* Script.js in Resources */,
+				89601A912FEA7A23008E17C6 /* Assets.xcassets in Resources */,
+				89601A652FEA7A23008E17C6 /* Main.storyboard in Resources */,
+				89601A8B2FEA7A23008E17C6 /* Style.css in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89601A692FEA7A23008E17C6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89601A8A2FEA7A23008E17C6 /* Icon.png in Resources */,
+				89601A8C2FEA7A23008E17C6 /* Style.css in Resources */,
+				89601A712FEA7A23008E17C6 /* Main.storyboard in Resources */,
+				89601A8E2FEA7A23008E17C6 /* Script.js in Resources */,
+				89601A922FEA7A23008E17C6 /* Assets.xcassets in Resources */,
+				89601A882FEA7A23008E17C6 /* Main.html in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89601A752FEA7A23008E17C6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89601AC22FEA7A24008E17C6 /* options.html in Resources */,
+				89601ABD2FEA7A24008E17C6 /* background.js in Resources */,
+				89601AC52FEA7A24008E17C6 /* options.css in Resources */,
+				89601ABF2FEA7A24008E17C6 /* options.js in Resources */,
+				89601AC42FEA7A24008E17C6 /* handoff.html in Resources */,
+				89601ABE2FEA7A24008E17C6 /* popup.html in Resources */,
+				89601AC32FEA7A24008E17C6 /* popup.css in Resources */,
+				89601AC62FEA7A24008E17C6 /* src in Resources */,
+				89601AC02FEA7A24008E17C6 /* icons in Resources */,
+				89601AC12FEA7A24008E17C6 /* manifest.json in Resources */,
+				89601ABC2FEA7A24008E17C6 /* popup.js in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89601A7F2FEA7A23008E17C6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89601AB72FEA7A24008E17C6 /* options.html in Resources */,
+				89601AB22FEA7A24008E17C6 /* background.js in Resources */,
+				89601ABA2FEA7A24008E17C6 /* options.css in Resources */,
+				89601AB42FEA7A24008E17C6 /* options.js in Resources */,
+				89601AB92FEA7A24008E17C6 /* handoff.html in Resources */,
+				89601AB32FEA7A24008E17C6 /* popup.html in Resources */,
+				89601AB82FEA7A24008E17C6 /* popup.css in Resources */,
+				89601ABB2FEA7A24008E17C6 /* src in Resources */,
+				89601AB52FEA7A24008E17C6 /* icons in Resources */,
+				89601AB62FEA7A24008E17C6 /* manifest.json in Resources */,
+				89601AB12FEA7A24008E17C6 /* popup.js in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		89601A552FEA7A23008E17C6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89601A8F2FEA7A23008E17C6 /* ViewController.swift in Sources */,
+				89601A5D2FEA7A23008E17C6 /* AppDelegate.swift in Sources */,
+				89601A5F2FEA7A23008E17C6 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89601A672FEA7A23008E17C6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89601A902FEA7A23008E17C6 /* ViewController.swift in Sources */,
+				89601A6E2FEA7A23008E17C6 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89601A732FEA7A23008E17C6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89601A932FEA7A23008E17C6 /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89601A7D2FEA7A23008E17C6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89601A942FEA7A23008E17C6 /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		89601A7A2FEA7A23008E17C6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 89601A762FEA7A23008E17C6 /* Clip to OmniFocus Extension (iOS) */;
+			targetProxy = 89601A792FEA7A23008E17C6 /* PBXContainerItemProxy */;
+		};
+		89601A842FEA7A23008E17C6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 89601A802FEA7A23008E17C6 /* Clip to OmniFocus Extension (macOS) */;
+			targetProxy = 89601A832FEA7A23008E17C6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		89601A4C2FEA7A21008E17C6 /* Main.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				89601A4D2FEA7A21008E17C6 /* Base */,
+			);
+			name = Main.html;
+			sourceTree = "<group>";
+		};
+		89601A602FEA7A23008E17C6 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				89601A612FEA7A23008E17C6 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		89601A632FEA7A23008E17C6 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				89601A642FEA7A23008E17C6 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		89601A6F2FEA7A23008E17C6 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				89601A702FEA7A23008E17C6 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		89601A952FEA7A23008E17C6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		89601A962FEA7A23008E17C6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		89601A982FEA7A23008E17C6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2386YZLWA2;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Clip to OmniFocus Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.spiralocean.cliptoomnifocus.Extension";
+				PRODUCT_NAME = "Clip to OmniFocus Extension";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		89601A992FEA7A23008E17C6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2386YZLWA2;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Clip to OmniFocus Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.spiralocean.cliptoomnifocus.Extension";
+				PRODUCT_NAME = "Clip to OmniFocus Extension";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		89601A9C2FEA7A23008E17C6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2386YZLWA2;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Clip to OmniFocus";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.spiralocean.cliptoomnifocus";
+				PRODUCT_NAME = "Clip to OmniFocus";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		89601A9D2FEA7A23008E17C6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2386YZLWA2;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Clip to OmniFocus";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.spiralocean.cliptoomnifocus";
+				PRODUCT_NAME = "Clip to OmniFocus";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		89601A9F2FEA7A23008E17C6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2386YZLWA2;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Clip to OmniFocus Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.spiralocean.cliptoomnifocus.Extension";
+				PRODUCT_NAME = "Clip to OmniFocus Extension";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		89601AA02FEA7A23008E17C6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2386YZLWA2;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Clip to OmniFocus Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.spiralocean.cliptoomnifocus.Extension";
+				PRODUCT_NAME = "Clip to OmniFocus Extension";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		89601AA32FEA7A23008E17C6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2386YZLWA2;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Clip to OmniFocus";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.spiralocean.cliptoomnifocus";
+				PRODUCT_NAME = "Clip to OmniFocus";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		89601AA42FEA7A23008E17C6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2386YZLWA2;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Clip to OmniFocus";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.spiralocean.cliptoomnifocus";
+				PRODUCT_NAME = "Clip to OmniFocus";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		89601A492FEA7A21008E17C6 /* Build configuration list for PBXProject "Clip to OmniFocus" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				89601A952FEA7A23008E17C6 /* Debug */,
+				89601A962FEA7A23008E17C6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		89601A972FEA7A23008E17C6 /* Build configuration list for PBXNativeTarget "Clip to OmniFocus Extension (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				89601A982FEA7A23008E17C6 /* Debug */,
+				89601A992FEA7A23008E17C6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		89601A9B2FEA7A23008E17C6 /* Build configuration list for PBXNativeTarget "Clip to OmniFocus (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				89601A9C2FEA7A23008E17C6 /* Debug */,
+				89601A9D2FEA7A23008E17C6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		89601A9E2FEA7A23008E17C6 /* Build configuration list for PBXNativeTarget "Clip to OmniFocus Extension (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				89601A9F2FEA7A23008E17C6 /* Debug */,
+				89601AA02FEA7A23008E17C6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		89601AA22FEA7A23008E17C6 /* Build configuration list for PBXNativeTarget "Clip to OmniFocus (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				89601AA32FEA7A23008E17C6 /* Debug */,
+				89601AA42FEA7A23008E17C6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 89601A462FEA7A21008E17C6 /* Project object */;
+}

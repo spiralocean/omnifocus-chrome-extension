@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+
+# Xcode / build artifacts
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+*.xcarchive
+.swiftpm/
+
+# Distribution / packaged build output
+dist/
+
+# Python
+__pycache__/
+*.pyc
+
+# Generated icon preview (regenerate via scripts/make-icon.py)
+icons/source/preview-256.png
+
+# Claude Code local settings
+.claude/settings.local.json
