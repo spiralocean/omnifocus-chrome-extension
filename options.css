@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap");
-
 :root {
   color-scheme: light;
   --paper: #f7f4ef;
@@ -22,7 +20,7 @@ body {
     radial-gradient(circle at top right, rgba(91, 75, 138, 0.1), transparent 35%),
     linear-gradient(180deg, #faf7f2 0%, var(--paper) 100%);
   color: var(--ink);
-  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
 .settings {
@@ -50,7 +48,7 @@ body {
 
 .settings__header h1 {
   margin: 0;
-  font-family: "Literata", Georgia, serif;
+  font-family: ui-serif, Georgia, serif;
   font-size: 32px;
   font-weight: 600;
 }
@@ -95,7 +93,7 @@ body {
 
 .field__textarea {
   padding: 12px;
-  font-family: "Literata", Georgia, serif;
+  font-family: ui-serif, Georgia, serif;
   font-size: 14px;
   line-height: 1.55;
   resize: vertical;
@@ -157,11 +155,45 @@ body {
   cursor: pointer;
 }
 
+.button--secondary {
+  padding: 9px 14px;
+  border: 1px solid var(--line);
+  color: var(--accent-deep);
+  background: rgba(91, 75, 138, 0.08);
+}
+
 .settings__status {
   min-height: 18px;
   margin: 0;
   font-size: 13px;
   color: var(--success);
+}
+
+.shortcuts {
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.shortcuts__item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(221, 212, 200, 0.6);
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.shortcuts__item:last-child {
+  border-bottom: 0;
+}
+
+.shortcuts__unset {
+  font-size: 12px;
+  font-style: italic;
+  opacity: 0.75;
 }
 
 .settings__help {

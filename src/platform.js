@@ -11,6 +11,17 @@ export const OMNIFOCUS_HANDOFF_FAILED =
   "Couldn't open OmniFocus. Make sure OmniFocus for Mac is installed.";
 
 /**
+ * Safari exposes a `chrome` alias but is not Chromium — it has no
+ * chrome://extensions/shortcuts page, and manages extension shortcuts through
+ * Safari's own settings instead.
+ *
+ * @returns {boolean}
+ */
+export function isSafari() {
+  return navigator.vendor === "Apple Computer, Inc.";
+}
+
+/**
  * @returns {boolean}
  */
 export function isMac() {

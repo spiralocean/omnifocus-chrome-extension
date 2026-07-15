@@ -91,11 +91,12 @@
       </section>
 
       <section class="settings__help">
-        <h2>Quick clip shortcuts</h2>
-        <ul>
-          <li><kbd>⌘</kbd><kbd>⇧</kbd><kbd>O</kbd> — clip current page</li>
-          <li><kbd>⌘</kbd><kbd>⇧</kbd><kbd>S</kbd> — clip selected text</li>
-        </ul>
+        <h2>Keyboard shortcuts</h2>
+        <ul class="shortcuts" id="shortcuts"></ul>
+        <p class="field__hint" id="shortcuts-help"></p>
+        <button type="button" class="button button--secondary" id="open-shortcuts" hidden>
+          Change shortcuts…
+        </button>
         <p>
           You can also right-click a page and choose
           <strong>Clip page to OmniFocus</strong>, or right-click a text
