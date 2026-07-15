@@ -61,13 +61,86 @@ export function truncate(text, max) {
   return `${text.slice(0, max - 1)}…`;
 }
 
+// Domain suffixes carry no brand information, so they never make useful keys.
+const SITE_SUFFIXES = new Set([
+  "com", "org", "net", "edu", "gov", "int", "mil",
+  "co", "io", "ai", "app", "dev", "me", "tv", "info", "biz", "news",
+  "uk", "us", "ca", "au", "de", "fr", "es", "it", "nl", "jp", "cn", "in", "br",
+]);
+
 /**
- * @param {string} title
+ * Reduce a value to a lowercase alphanumeric key: "The Verge" -> "theverge".
+ *
+ * @param {string} value
  * @returns {string}
  */
-export function defaultTaskName(title) {
-  const cleaned = title.replace(/\s*[-|–—]\s*[^-|–—]+$/, "").trim();
-  return truncate(cleaned || title || "Untitled", NAME_MAX_LENGTH);
+function toKey(value) {
+  return (value || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+/**
+ * The set of keys a title's trailing segment could plausibly match for this
+ * site. siteName is either an og:site_name ("The Verge") or a bare hostname
+ * ("en.wikipedia.org"), so take the whole thing plus each meaningful hostname
+ * label — that way "Wikipedia" matches en.wikipedia.org and "BBC" matches
+ * bbc.co.uk without having to parse public suffixes.
+ *
+ * @param {string} siteName
+ * @returns {Set<string>}
+ */
+function siteKeys(siteName) {
+  const raw = (siteName || "").toLowerCase().trim();
+  const keys = new Set();
+  const whole = toKey(raw);
+  if (whole) keys.add(whole);
+
+  if (raw.includes(".")) {
+    for (const label of raw.split(".")) {
+      const key = toKey(label);
+      if (key.length >= 3 && key !== "www" && !SITE_SUFFIXES.has(key)) {
+        keys.add(key);
+      }
+    }
+  }
+
+  return keys;
+}
+
+/**
+ * Page titles usually end with the site's own name ("Some Article - The Verge"),
+ * which is noise in a task name. Strip that segment only when it actually looks
+ * like the site the page came from — a dash on its own is not evidence of
+ * boilerplate. "Song - Artist" on YouTube is content, not a suffix, and
+ * extract-page.js has already removed the real " - YouTube" before this runs.
+ *
+ * When the match is uncertain, keep the whole title: an over-long name lands in
+ * an editable field, but an over-trimmed one silently loses content.
+ *
+ * @param {string} title
+ * @param {string} [siteName]
+ * @returns {string}
+ */
+export function defaultTaskName(title, siteName = "") {
+  const trimmed = (title || "").trim();
+  const match = trimmed.match(/^(.*\S)\s*[-|–—]\s*([^-|–—]+?)\s*$/);
+  const keys = siteKeys(siteName);
+  let cleaned = trimmed;
+
+  if (match && keys.size > 0) {
+    const segment = toKey(match[2]);
+    const looksLikeSite =
+      keys.has(segment) ||
+      (segment.length >= 4 &&
+        [...keys].some(
+          (key) =>
+            key.length >= 4 &&
+            (key.includes(segment) || segment.includes(key))
+        ));
+
+    if (looksLikeSite) cleaned = match[1].trim();
+  }
+
+  return truncate(cleaned || trimmed || "Untitled", NAME_MAX_LENGTH);
 }
 
 /**
@@ -102,7 +175,7 @@ function shouldRevealNewItem(settings) {
 }
 
 /**
- * @param {{ title: string, url: string, excerpt?: string, selection?: string }} pageData
+ * @param {{ title: string, url: string, excerpt?: string, selection?: string, siteName?: string }} pageData
  * @param {Partial<ClipSettings>} settings
  * @param {{ name?: string, note?: string }} [overrides]
  * @returns {string}
@@ -110,7 +183,7 @@ function shouldRevealNewItem(settings) {
 export function buildClipUrl(pageData, settings, overrides = {}) {
   const merged = { ...DEFAULT_SETTINGS, ...settings };
   const name = truncate(
-    overrides.name || defaultTaskName(pageData.title),
+    overrides.name || defaultTaskName(pageData.title, pageData.siteName),
     NAME_MAX_LENGTH
   );
   const note =

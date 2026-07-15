@@ -73,7 +73,7 @@ async function init() {
  */
 function populateForm(data, settings) {
   siteNameEl.textContent = data.siteName || new URL(data.url).hostname;
-  taskNameEl.value = defaultTaskName(data.title);
+  taskNameEl.value = defaultTaskName(data.title, data.siteName);
   taskNoteEl.value = formatClipNote(data, settings.noteTemplate);
   taskProjectEl.value = settings.project;
   taskTagEl.value = settings.tag;

@@ -139,10 +139,11 @@ async function getSettings() {
 }
 
 /**
- * @param {{ title?: string }} pageData
+ * @param {{ title?: string, siteName?: string }} pageData
  */
 async function notifyClipSuccess(pageData) {
-  const taskName = defaultTaskName(pageData.title || "") || "Web page";
+  const taskName =
+    defaultTaskName(pageData.title || "", pageData.siteName) || "Web page";
   await showExtensionNotification("Clipped to OmniFocus", taskName);
 }
 
