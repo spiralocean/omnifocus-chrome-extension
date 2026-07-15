@@ -103,6 +103,9 @@ src/                                Shared logic (URL building, page extraction,
                                       native open, platform checks)
 icons/                              Extension icons
 scripts/make-icon.py                Regenerates all icons from one master
+scripts/build-chrome.sh             Packages the Chrome Web Store zip
+tests/                              Unit tests (node --test, no dependencies)
+docs/store-listing.md               Chrome Web Store listing copy + justifications
 native-host/                        Chrome/Brave native messaging host + installer
 safari/                             Safari web-extension Xcode project (macOS/iOS)
 ios/                                iOS share-extension project
@@ -111,6 +114,29 @@ ios/                                iOS share-extension project
 The Safari extension keeps its own copy of the shared code under
 `safari/…/Shared (Extension)/Resources/`. When you change a file in the repo
 root or `src/`, copy it into that folder so the two stay in sync.
+
+## Tests
+
+```sh
+node --test
+```
+
+No dependencies or test framework — `node --test` is built in. The suite covers
+`defaultTaskName`, the heuristic that strips a page title's trailing site name
+("Some Article - The Verge" → "Some Article"). It is worth the tests because the
+interesting behaviour is all in the edges: a dash is *not* reliable evidence of
+boilerplate, so "Song Title - Artist Name" on YouTube has to survive intact.
+
+## Building the store package
+
+```sh
+./scripts/build-chrome.sh          # -> dist/web-clipper-for-omnifocus-chrome-v<version>.zip
+```
+
+Always build this way rather than zipping by hand — a hand-made package silently
+drifted three weeks behind `src/` once already. The script ships an explicit
+allowlist and fails if a `src/*.js` file is not on it, so a new runtime file
+can't go missing from the store build while still working when loaded unpacked.
 
 ## Regenerating the icon
 
