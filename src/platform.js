@@ -5,7 +5,7 @@
 export const OMNIFOCUS_DOWNLOAD_URL = "https://www.omnigroup.com/omnifocus/";
 
 export const OMNIFOCUS_MAC_REQUIRED =
-  "Clip to OmniFocus requires macOS and OmniFocus for Mac.";
+  "Web Clipper for OmniFocus requires macOS and OmniFocus for Mac.";
 
 export const OMNIFOCUS_HANDOFF_FAILED =
   "Couldn't open OmniFocus. Make sure OmniFocus for Mac is installed.";

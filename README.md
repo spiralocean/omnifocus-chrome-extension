@@ -1,4 +1,4 @@
-# Clip to OmniFocus
+# Web Clipper for OmniFocus
 
 Send web pages and text selections straight to [OmniFocus](https://www.omnigroup.com/omnifocus/)
 as tasks — with the page URL, an excerpt, and your default project/tag already
@@ -36,7 +36,7 @@ the background** so clipping never steals focus from the page you're reading.
 1. Open `chrome://extensions` (or `brave://extensions`) and turn on
    **Developer mode**.
 2. Click **Load unpacked** and select this repository's root folder.
-3. The **Clip to OmniFocus** icon appears in the toolbar.
+3. The **Web Clipper for OmniFocus** icon appears in the toolbar.
 
 #### Optional: flash-free background open
 
@@ -46,7 +46,7 @@ opens the URL with `open -g` (background):
 
 ```sh
 # Find the extension's ID at chrome://extensions (Developer mode → the ID under
-# "Clip to OmniFocus"), then:
+# "Web Clipper for OmniFocus"), then:
 ./native-host/install.sh <extension-id>
 ```
 

@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Clip to OmniFocus** does not collect, transmit, or store your data on any
+**Web Clipper for OmniFocus** does not collect, transmit, or store your data on any
 server. It has no backend, no analytics, and makes no network requests.
 
 ## What the extension does with your data
@@ -44,7 +44,7 @@ The extension requests only what these functions require:
 | Permission | Why |
 |---|---|
 | `activeTab` / `scripting` | Read the current page's title, URL, and content **when you clip it**. |
-| `contextMenus` | Add the right-click "Clip to OmniFocus" items. |
+| `contextMenus` | Add the right-click "Clip page to OmniFocus" and "Clip selection to OmniFocus" items. |
 | `notifications` | Show a confirmation after a clip. |
 | `storage` | Remember your default settings. |
 | `nativeMessaging` | Talk to the optional local helper that opens OmniFocus in the background. |
@@ -53,6 +53,6 @@ The extension requests only what these functions require:
 
 Questions: **sz@spiralocean.com**
 
-_Clip to OmniFocus is an unofficial extension and is not affiliated with or
+_Web Clipper for OmniFocus is an unofficial extension and is not affiliated with or
 endorsed by The Omni Group. OmniFocus and the OmniFocus icon are trademarks of
 The Omni Group._

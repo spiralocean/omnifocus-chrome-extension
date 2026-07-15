@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Clip to OmniFocus",
+  "name": "Web Clipper for OmniFocus",
   "version": "1.0.0",
   "description": "Clip articles and web pages into OmniFocus tasks with one click.",
   "browser_specific_settings": {

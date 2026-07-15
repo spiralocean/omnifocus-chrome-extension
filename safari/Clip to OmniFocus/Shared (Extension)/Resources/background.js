@@ -150,5 +150,5 @@ async function notifyClipSuccess(pageData) {
  * @param {string} message
  */
 async function notifyClipFailure(message) {
-  await showExtensionNotification("Clip to OmniFocus", message);
+  await showExtensionNotification("Web Clipper for OmniFocus", message);
 }
