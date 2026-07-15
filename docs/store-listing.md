@@ -80,13 +80,25 @@ off the user's machine; clips go only to the local OmniFocus app.
 
 ## Privacy policy URL
 https://github.com/spiralocean/omnifocus-chrome-extension/blob/main/PRIVACY.md
-  ⚠ BLOCKED until the repo is public — the store requires a publicly reachable URL.
+Repo made public 2026-07-15; URL verified reachable anonymously (HTTP 200).
+
+## Support / homepage URL (optional)
+Homepage: https://github.com/spiralocean/omnifocus-chrome-extension
+Support: sz@spiralocean.com
+A clip.spiralocean.com landing page (matching the overrun/bathyal template) is
+deferred — it would serve the Safari App Store submission too, which needs both
+a privacy policy URL and a support URL. Revisit alongside the Safari track.
 
 ## Assets still needed
 - [ ] Screenshot(s): 1280x800 or 640x400, at least 1, up to 5. None exist yet.
+      Must be captured manually — extension popups aren't tab content and
+      chrome-extension:// URLs are blocked to automation, so the popup can't be
+      captured by driving the browser. Use Cmd+Shift+4 then Space.
 - [ ] (Optional) Small promo tile 440x280.
 - [x] Icon 128x128 — icons/icon128.png
 - [x] Package — dist/web-clipper-for-omnifocus-chrome-v1.0.0.zip
+      Rebuild with ./scripts/build-chrome.sh — never hand-assemble it.
+- [x] Privacy policy URL — live
 
 ## Post-publish follow-up
 The store assigns a NEW extension ID (≠ the Brave unpacked ID
