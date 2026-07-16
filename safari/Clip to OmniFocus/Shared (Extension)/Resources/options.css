@@ -13,9 +13,14 @@
   box-sizing: border-box;
 }
 
+/* manifest.json sets options_ui.open_in_tab: false, so Chrome renders this page
+ * in an iframe and sizes the dialog to fit the content. Nothing here may size
+ * itself FROM the viewport (100vh/100vw): the dialog's size depends on the
+ * content, so content that depends on the viewport makes Chrome measure,
+ * resize, re-measure, and visibly judder. Keep this page's height and width
+ * driven purely by its content. */
 body {
   margin: 0;
-  min-height: 100vh;
   background:
     radial-gradient(circle at top right, rgba(91, 75, 138, 0.1), transparent 35%),
     linear-gradient(180deg, #faf7f2 0%, var(--paper) 100%);
@@ -24,7 +29,7 @@ body {
 }
 
 .settings {
-  width: min(640px, calc(100vw - 32px));
+  width: 640px;
   margin: 32px auto;
   padding: 28px;
   border: 1px solid rgba(255, 255, 255, 0.85);
@@ -180,6 +185,7 @@ body {
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
+  min-height: 34px;
   padding: 7px 0;
   border-bottom: 1px solid rgba(221, 212, 200, 0.6);
   color: var(--ink-soft);

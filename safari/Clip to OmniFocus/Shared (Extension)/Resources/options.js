@@ -21,6 +21,10 @@ const openShortcutsEl = document.getElementById("open-shortcuts");
 init();
 
 async function init() {
+  // Build every row before the first await. This page is an auto-sized dialog,
+  // so anything that appears after the first paint resizes it under the user.
+  const shortcutValues = renderShortcuts();
+
   const settings = await chrome.storage.sync.get(DEFAULT_SETTINGS);
   projectEl.value = settings.project ?? "";
   tagEl.value = settings.tag ?? DEFAULT_SETTINGS.tag;
@@ -34,41 +38,32 @@ async function init() {
   activateOmniFocusEl.addEventListener("change", syncRevealNewItemState);
   form.addEventListener("submit", onSubmit);
 
-  await renderShortcuts();
+  await fillShortcutValues(shortcutValues);
 }
 
 /**
- * Render the shortcuts the browser actually has bound, rather than the ones the
- * manifest suggested — they diverge as soon as anyone rebinds or clears one.
+ * Lay out one row per command, synchronously. getManifest() is sync, so the
+ * rows — and therefore the page's height — are settled before the first paint;
+ * only the binding text arrives later.
+ *
+ * @returns {Map<string, HTMLElement>} command name -> the cell holding its key
  */
-async function renderShortcuts() {
-  /** @type {chrome.commands.Command[]} */
-  let commands = [];
-  try {
-    commands = (await chrome.commands?.getAll?.()) ?? [];
-  } catch {
-    commands = [];
-  }
-
-  const clipCommands = commands.filter((command) => command.name !== "_execute_action");
+function renderShortcuts() {
+  const commands = Object.entries(chrome.runtime.getManifest().commands ?? {});
+  /** @type {Map<string, HTMLElement>} */
+  const valueCells = new Map();
 
   shortcutsEl.replaceChildren(
-    ...clipCommands.map((command) => {
+    ...commands.map(([name, command]) => {
       const item = document.createElement("li");
+      item.className = "shortcuts__item";
+
       const label = document.createElement("span");
-      label.textContent = command.description || command.name;
+      label.textContent = command.description || name;
 
       const value = document.createElement("span");
-      if (command.shortcut) {
-        const key = document.createElement("kbd");
-        key.textContent = command.shortcut;
-        value.append(key);
-      } else {
-        value.className = "shortcuts__unset";
-        value.textContent = "Not set";
-      }
+      valueCells.set(name, value);
 
-      item.className = "shortcuts__item";
       item.append(label, value);
       return item;
     })
@@ -77,7 +72,7 @@ async function renderShortcuts() {
   if (isSafari()) {
     shortcutsHelpEl.textContent =
       "Safari manages extension shortcuts in Safari → Settings → Extensions.";
-    return;
+    return valueCells;
   }
 
   shortcutsHelpEl.textContent =
@@ -87,6 +82,39 @@ async function renderShortcuts() {
     // A plain link can't reach chrome:// URLs; tabs.create can.
     chrome.tabs.create({ url: CHROME_SHORTCUTS_URL });
   });
+
+  return valueCells;
+}
+
+/**
+ * Fill in the bindings the browser actually reports, which diverge from the
+ * manifest's suggestions the moment anyone rebinds or clears one. Text only —
+ * .shortcuts__item reserves the row height so this cannot resize the dialog.
+ *
+ * @param {Map<string, HTMLElement>} valueCells
+ */
+async function fillShortcutValues(valueCells) {
+  /** @type {{ name?: string, shortcut?: string }[]} */
+  let commands = [];
+  try {
+    commands = (await chrome.commands?.getAll?.()) ?? [];
+  } catch {
+    return;
+  }
+
+  for (const command of commands) {
+    const cell = valueCells.get(command.name);
+    if (!cell) continue;
+
+    if (command.shortcut) {
+      const key = document.createElement("kbd");
+      key.textContent = command.shortcut;
+      cell.replaceChildren(key);
+    } else {
+      cell.className = "shortcuts__unset";
+      cell.textContent = "Not set";
+    }
+  }
 }
 
 function syncRevealNewItemState() {
