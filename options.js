@@ -17,6 +17,7 @@ const statusEl = document.getElementById("status");
 const shortcutsEl = document.getElementById("shortcuts");
 const shortcutsHelpEl = document.getElementById("shortcuts-help");
 const openShortcutsEl = document.getElementById("open-shortcuts");
+const shortcutsRuleEl = document.getElementById("shortcuts-rule");
 
 init();
 
@@ -78,6 +79,8 @@ function renderShortcuts() {
   shortcutsHelpEl.textContent =
     "Shortcuts are set by the browser, not by this extension. Use the button below to change them, or to clear one so it has no shortcut at all.";
   openShortcutsEl.hidden = false;
+  // The accepted-modifier rule is Chrome's, so only reveal it on Chrome.
+  shortcutsRuleEl.hidden = false;
   openShortcutsEl.addEventListener("click", () => {
     // A plain link can't reach chrome:// URLs; tabs.create can.
     chrome.tabs.create({ url: CHROME_SHORTCUTS_URL });
