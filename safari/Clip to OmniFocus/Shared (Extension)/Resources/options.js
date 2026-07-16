@@ -18,12 +18,17 @@ const shortcutsEl = document.getElementById("shortcuts");
 const shortcutsHelpEl = document.getElementById("shortcuts-help");
 const openShortcutsEl = document.getElementById("open-shortcuts");
 const shortcutsRuleEl = document.getElementById("shortcuts-rule");
+const versionEl = document.getElementById("version");
 
 init();
 
 async function init() {
   // Build every row before the first await. This page is an auto-sized dialog,
   // so anything that appears after the first paint resizes it under the user.
+  // Read the version from the manifest so it can't drift from what's shipped.
+  const manifest = chrome.runtime?.getManifest?.() ?? {};
+  if (manifest.version) versionEl.textContent = `Version ${manifest.version}`;
+
   const shortcutValues = renderShortcuts();
 
   const settings = await chrome.storage.sync.get(DEFAULT_SETTINGS);
