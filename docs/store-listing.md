@@ -1,121 +1,158 @@
-# Chrome Web Store listing — Web Clipper for OmniFocus v1.0.0
+# Chrome Web Store submission — Web Clipper for OmniFocus v1.0.0
 
-## Name (25/75)
+Copy-paste checklist, ordered by dashboard tab. Dashboard:
+https://chrome.google.com/webstore/devconsole → **Add new item**.
+
+Fields are grouped exactly as the console presents them. Each fenced block is
+meant to be pasted verbatim.
+
+---
+
+## 0. Upload the package
+
+- [ ] **Add new item** → drag in / choose file:
+      `dist/web-clipper-for-omnifocus-chrome-v1.0.0.zip`
+- [ ] Rebuild first if anything under `src/` or the root changed:
+      `./scripts/build-chrome.sh` (never hand-zip — it drifted once).
+
+The name, version, description, icon, and permissions are read from the package.
+The fields below fill in everything the package can't carry.
+
+---
+
+## 1. Store listing tab
+
+**Item name** (25/75)
+```
 Web Clipper for OmniFocus
+```
 
-## Short description (64/132)
+**Summary / short description** (64/132)
+```
 Clip articles and web pages into OmniFocus tasks with one click.
+```
 
-## Category
-Productivity / Workflow
+**Category:** Productivity
+**Language:** English
 
-## Single purpose
-Create an OmniFocus task from the web page the user is currently viewing.
+**Description**
+```
+Send web pages and text selections straight to OmniFocus as tasks — with the page URL, an excerpt, and your default project and tag already filled in.
 
-## Detailed description (draft)
-
-Send web pages and text selections straight to OmniFocus as tasks — with the
-page URL, an excerpt, and your default project and tag already filled in.
-
-• One-click clipping — from the toolbar button, the right-click menu (page or
-  selected text), or a keyboard shortcut (⌘⇧O for the page, ⌘⇧S for a selection).
-• Background open — OmniFocus receives the task without coming to the
-  foreground, so you stay on the page you're reading.
-• Smart capture — pulls the page title, a clean excerpt, and any selected text
-  into the task note.
-• YouTube-aware — captures the video's real title and description, and folds the
-  current playback position into the link so the task resumes where you left off.
-• Your defaults — set a default project, tag, note template, and flags once;
-  every clip uses them.
-• Private by design — no accounts, no analytics, no servers. Your clips go
-  straight from the page to OmniFocus on your own Mac.
+• One-click clipping — from the toolbar button, the right-click menu (page or selected text), or a keyboard shortcut (⌘⇧O for the page, ⌘⇧S for a selection).
+• Background open — OmniFocus receives the task without coming to the foreground, so you stay on the page you're reading.
+• Smart capture — pulls the page title, a clean excerpt, and any selected text into the task note.
+• YouTube-aware — captures the video's real title and description, and folds the current playback position into the link so the task resumes where you left off.
+• Your defaults — set a default project, tag, note template, and flags once; every clip uses them.
+• Private by design — no accounts, no analytics, no servers. Your clips go straight from the page to OmniFocus on your own Mac.
 
 Requires macOS and OmniFocus for Mac.
 
-Web Clipper for OmniFocus is an unofficial extension and is not affiliated with
-or endorsed by The Omni Group. OmniFocus and the OmniFocus icon are trademarks
-of The Omni Group.
+Web Clipper for OmniFocus is an unofficial extension and is not affiliated with or endorsed by The Omni Group. OmniFocus and the OmniFocus icon are trademarks of The Omni Group.
+```
 
-## Permission justifications (paste verbatim into the dashboard)
+**Graphic assets**
+- [ ] Screenshots (need ≥1; both are exactly 1280×800):
+      - `docs/screenshots/01-article.png`
+      - `docs/screenshots/02-youtube.png`
+- [ ] Store icon 128×128 — comes from the package (`icons/icon128.png`); no upload.
+- [ ] Small promo tile 440×280 — optional, skip.
 
-activeTab
-  Reads the active tab's title, URL, and page content only at the moment the
-  user explicitly clips — toolbar button, context-menu item, or keyboard
-  shortcut — in order to build the OmniFocus task. No passive or background
-  access to any tab.
+**Official URL / Homepage**
+```
+https://github.com/spiralocean/omnifocus-chrome-extension
+```
 
-scripting
-  Injects the extraction script into the active tab on that same user action to
-  pull the page title, excerpt, selected text, and, on YouTube watch pages, the
-  video title, description, and playback position. Used instead of a persistent
-  content script so the extension only touches a page when asked to.
+**Support URL** (or use the email below)
+```
+sz@spiralocean.com
+```
 
-contextMenus
-  Adds the "Clip page to OmniFocus" and "Clip selection to OmniFocus" right-click
-  items, a primary way users invoke the extension.
+---
 
-notifications
-  Shows a brief confirmation that the clip reached OmniFocus, or an error if
-  OmniFocus for Mac is not installed. The popup closes on clip, so this is the
-  only feedback channel.
+## 2. Privacy tab  ← the one reviewers actually read
 
-storage
-  Stores the user's own defaults (project, tag, note template, toggles) so every
-  clip uses them. Preferences only — no clipped page content is stored.
+**Single purpose**
+```
+Create an OmniFocus task from the web page the user is currently viewing.
+```
 
-nativeMessaging
-  Optional. If the user manually installs the companion helper from the project's
-  public GitHub repo, the extension passes it the omnifocus:// URL so it can be
-  opened with `open -g` (background), avoiding a focus change. The extension is
-  fully functional without the helper and falls back to a handoff tab. The helper
-  is local to the user's Mac; nothing is sent to any remote server.
+**Permission justifications** — paste one per permission field:
 
-Remote code: No — all code is included in the package.
+`activeTab`
+```
+Reads the active tab's title, URL, and page content only at the moment the user explicitly clips — toolbar button, context-menu item, or keyboard shortcut — in order to build the OmniFocus task. No passive or background access to any tab.
+```
 
-## Data usage disclosure
-Certify: does NOT collect or transmit any of the listed data categories.
-No PII, no health/financial data, no authentication info, no personal
-communications, no location, no web history, no user activity. No data is sent
-off the user's machine; clips go only to the local OmniFocus app.
+`scripting`
+```
+Injects the extraction script into the active tab on that same user action to pull the page title, excerpt, selected text, and, on YouTube watch pages, the video title, description, and playback position. Used instead of a persistent content script so the extension only touches a page when asked to.
+```
 
-## Privacy policy URL
+`contextMenus`
+```
+Adds the "Clip page to OmniFocus" and "Clip selection to OmniFocus" right-click items, a primary way users invoke the extension.
+```
+
+`notifications`
+```
+Shows a brief confirmation that the clip reached OmniFocus, or an error if OmniFocus for Mac is not installed. The popup closes on clip, so this is the only feedback channel.
+```
+
+`storage`
+```
+Stores the user's own defaults (project, tag, note template, toggles) so every clip uses them. Preferences only — no clipped page content is stored.
+```
+
+`nativeMessaging`  ← most likely to draw a reviewer question; answer is here
+```
+Optional. If the user manually installs the companion helper from the project's public GitHub repo, the extension passes it the omnifocus:// URL so it can be opened with `open -g` (background), avoiding a focus change. The extension is fully functional without the helper and falls back to a handoff tab. The helper is local to the user's Mac; nothing is sent to any remote server.
+```
+
+**Remote code:** select **No** — all code is in the package.
+
+**Data usage** — check nothing; certify all three:
+- [ ] Does **not** collect or use data for purposes unrelated to the single purpose
+- [ ] Does **not** sell or transfer data to third parties
+- [ ] Does **not** use or transfer data for creditworthiness / lending
+
+  Rationale if asked: no PII, health/financial data, auth info, personal
+  communications, location, web history, or user activity leaves the machine —
+  clips go only to the local OmniFocus app.
+
+**Privacy policy URL** (live, HTTP 200 verified)
+```
 https://github.com/spiralocean/omnifocus-chrome-extension/blob/main/PRIVACY.md
-Repo made public 2026-07-15; URL verified reachable anonymously (HTTP 200).
+```
 
-## Support / homepage URL (optional)
-Homepage: https://github.com/spiralocean/omnifocus-chrome-extension
-Support: sz@spiralocean.com
-A clip.spiralocean.com landing page (matching the overrun/bathyal template) is
-deferred — it would serve the Safari App Store submission too, which needs both
-a privacy policy URL and a support URL. Revisit alongside the Safari track.
+---
 
-## Assets
-- [x] Screenshots — docs/screenshots/, both exactly 1280x800
-      01-article.png  gettingthingsdone.com — the core read-later case. Also
-                      shows the site-name trim: "What is GTD", not
-                      "What is GTD - Getting Things Done".
-      02-youtube.png  a TEDx talk — shows the timestamp (&t=450s) folded into
-                      the link, which nothing else does.
-      Captured by hand in Chrome: extension popups aren't tab content and
-      chrome-extension:// URLs are closed to automation, so no browser tooling
-      can reach the popup. Cmd+Shift+4 then Space, Option-click to drop the
-      window shadow.
-      Shooting notes, learned the hard way — hide the bookmarks bar
-      (Cmd+Shift+B; an earlier take leaked "job search", YNAB, Budget, Amazon
-      payments), stay signed out, and check the YouTube recommendations sidebar
-      for anything you don't want on a public listing forever (an earlier take
-      had a talk titled "No Sex Marriage - Masturbation..." in frame; the crop
-      to 1.6 removed it).
-- [ ] (Optional) Small promo tile 440x280.
-- [ ] (Optional polish) Reshoot with Project and Tag filled in — they currently
-      read "Optional", so the defaults feature is invisible in both shots.
-- [x] Icon 128x128 — icons/icon128.png
-- [x] Package — dist/web-clipper-for-omnifocus-chrome-v1.0.0.zip
-      Rebuild with ./scripts/build-chrome.sh — never hand-assemble it.
-- [x] Privacy policy URL — live
+## 3. Distribution tab
+
+- [ ] Visibility: **Public** (or Unlisted for a soft launch — your call)
+- [ ] Regions: **All regions**
+- [ ] Pricing: Free
+
+---
+
+## 4. Submit
+
+- [ ] Save draft (each tab saves independently — do all three first).
+- [ ] **Submit for review.** First review usually takes a few days to ~a week.
+
+---
 
 ## Post-publish follow-up
-The store assigns a NEW extension ID (≠ the Brave unpacked ID
-aomlmgmnbmmfgjbhnpbkegghnpnmkedp). Once published, update the README's
-`./native-host/install.sh <extension-id>` instructions with the published ID,
-since the host manifest's allowed_origins is keyed to it.
+
+- [ ] The store assigns a **new extension ID** (≠ the Brave unpacked ID
+      `aomlmgmnbmmfgjbhnpbkegghnpnmkedp`). Grab it from the dashboard.
+- [ ] Update the README's `./native-host/install.sh <extension-id>` line with the
+      published ID — the native host's `allowed_origins` is keyed to it. (Ping me
+      with the ID and I'll do it.)
+
+## Optional polish (not blockers)
+- [ ] Reshoot screenshots with Project and Tag filled in — they currently read
+      "Optional", so the defaults feature is invisible in both shots.
+- [ ] `clip.spiralocean.com` landing page (matches the overrun/bathyal template).
+      Deferred; would also serve the Safari App Store submission, which needs a
+      privacy policy URL and a support URL. Revisit with the Safari track.
