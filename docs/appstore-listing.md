@@ -130,16 +130,24 @@ Mac App Store accepts any one of these sizes (need **at least 1**, up to 10):
 
 ---
 
-## Build & upload (technical — largely done here)
+## Build & upload (DONE)
 
-- [x] Archive: `xcodebuild ... -scheme "Clip to OmniFocus (macOS)" archive` — succeeds.
-- [ ] Export App Store `.pkg`: `xcodebuild -exportArchive` with App Store method
-      (Apple Distribution re-signing happens here).
-- [ ] Upload to App Store Connect — needs auth: an **App Store Connect API key**
-      (issuer id + key id + .p8) or an app-specific password. This is your
-      credential; either you run the upload, or provide an API key for me to use.
-- [ ] In App Store Connect: create the macOS app record (bundle id above), attach
-      the uploaded build, fill the fields above, add screenshots, submit.
+- [x] Archive → export → App Store `.pkg`, signed Apple Distribution + Mac Team
+      Store profile + 3rd Party Mac Developer Installer. Version 1.0.0, build 1,
+      display name "Web Clipper for OmniFocus".
+- [x] Uploaded to App Store Connect 2026-07-16 via `xcrun altool --upload-app`
+      with API key BBX5APPZS8 (issuer b26a8e1e-...). UPLOAD SUCCEEDED.
+- [x] App record created in ASC (macOS, com.spiralocean.cliptoomnifocus).
+
+## Remaining (in App Store Connect, after build processing ~5–30 min)
+
+- [ ] Set the version to **1.0.0** (must match the build).
+- [ ] Attach the processed build to the 1.0.0 version.
+- [ ] **Export compliance**: the extension makes no network requests and uses no
+      non-exempt encryption → answer the encryption question as exempt / "No".
+- [ ] Paste the metadata fields above; set privacy = Data Not Collected.
+- [ ] Add Safari screenshots (see Screenshots section).
+- [ ] Submit for review.
 
 ---
 
