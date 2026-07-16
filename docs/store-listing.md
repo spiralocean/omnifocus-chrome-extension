@@ -65,7 +65,7 @@ https://github.com/spiralocean/omnifocus-chrome-extension
 
 **Support URL** (or use the email below)
 ```
-support@clip.spiralocean.com
+clip@spiralocean.com
 ```
 Once the site is live, prefer the support page URL: https://clip.spiralocean.com/support
 

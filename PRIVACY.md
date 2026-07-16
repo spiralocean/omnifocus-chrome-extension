@@ -51,7 +51,7 @@ The extension requests only what these functions require:
 
 ## Contact
 
-Questions: **sz@spiralocean.com**
+Questions: **clip@spiralocean.com**
 
 _Web Clipper for OmniFocus is an unofficial extension and is not affiliated with or
 endorsed by The Omni Group. OmniFocus and the OmniFocus icon are trademarks of
