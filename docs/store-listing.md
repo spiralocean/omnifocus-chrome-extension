@@ -89,12 +89,26 @@ A clip.spiralocean.com landing page (matching the overrun/bathyal template) is
 deferred — it would serve the Safari App Store submission too, which needs both
 a privacy policy URL and a support URL. Revisit alongside the Safari track.
 
-## Assets still needed
-- [ ] Screenshot(s): 1280x800 or 640x400, at least 1, up to 5. None exist yet.
-      Must be captured manually — extension popups aren't tab content and
-      chrome-extension:// URLs are blocked to automation, so the popup can't be
-      captured by driving the browser. Use Cmd+Shift+4 then Space.
+## Assets
+- [x] Screenshots — docs/screenshots/, both exactly 1280x800
+      01-article.png  gettingthingsdone.com — the core read-later case. Also
+                      shows the site-name trim: "What is GTD", not
+                      "What is GTD - Getting Things Done".
+      02-youtube.png  a TEDx talk — shows the timestamp (&t=450s) folded into
+                      the link, which nothing else does.
+      Captured by hand in Chrome: extension popups aren't tab content and
+      chrome-extension:// URLs are closed to automation, so no browser tooling
+      can reach the popup. Cmd+Shift+4 then Space, Option-click to drop the
+      window shadow.
+      Shooting notes, learned the hard way — hide the bookmarks bar
+      (Cmd+Shift+B; an earlier take leaked "job search", YNAB, Budget, Amazon
+      payments), stay signed out, and check the YouTube recommendations sidebar
+      for anything you don't want on a public listing forever (an earlier take
+      had a talk titled "No Sex Marriage - Masturbation..." in frame; the crop
+      to 1.6 removed it).
 - [ ] (Optional) Small promo tile 440x280.
+- [ ] (Optional polish) Reshoot with Project and Tag filled in — they currently
+      read "Optional", so the defaults feature is invisible in both shots.
 - [x] Icon 128x128 — icons/icon128.png
 - [x] Package — dist/web-clipper-for-omnifocus-chrome-v1.0.0.zip
       Rebuild with ./scripts/build-chrome.sh — never hand-assemble it.
