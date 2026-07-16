@@ -150,9 +150,21 @@ https://github.com/spiralocean/omnifocus-chrome-extension/blob/main/PRIVACY.md
       published ID — the native host's `allowed_origins` is keyed to it. (Ping me
       with the ID and I'll do it.)
 
+## Canonical URLs (decided 2026-07-16)
+
+The **website is the single source of truth** for both stores. When
+`clip.spiralocean.com` is live:
+
+- Privacy policy → `https://clip.spiralocean.com/privacy` (the real text lives
+  here; repo `PRIVACY.md` becomes a short pointer to it, not a second copy).
+- Support / homepage → `https://clip.spiralocean.com`.
+- Point BOTH the Chrome listing and the Apple submission at these same URLs.
+
+Until the page exists, Chrome ships with the GitHub URLs above (editable after
+publish without re-review), then gets swapped to the domain once it's live.
+Apple effectively requires a working support **web page**, so the domain is
+close to a prerequisite there, not just polish.
+
 ## Optional polish (not blockers)
 - [ ] Reshoot screenshots with Project and Tag filled in — they currently read
       "Optional", so the defaults feature is invisible in both shots.
-- [ ] `clip.spiralocean.com` landing page (matches the overrun/bathyal template).
-      Deferred; would also serve the Safari App Store submission, which needs a
-      privacy policy URL and a support URL. Revisit with the Safari track.
