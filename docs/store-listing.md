@@ -60,14 +60,14 @@ Web Clipper for OmniFocus is an unofficial extension and is not affiliated with 
 
 **Official URL / Homepage**
 ```
-https://github.com/spiralocean/omnifocus-chrome-extension
+https://clip.spiralocean.com
 ```
 
-**Support URL** (or use the email below)
+**Support URL**
 ```
-clip@spiralocean.com
+https://clip.spiralocean.com/support
 ```
-Once the site is live, prefer the support page URL: https://clip.spiralocean.com/support
+(Email alternative: clip@spiralocean.com)
 
 ---
 
@@ -123,7 +123,7 @@ Optional. If the user manually installs the companion helper from the project's 
 
 **Privacy policy URL** (live, HTTP 200 verified)
 ```
-https://github.com/spiralocean/omnifocus-chrome-extension/blob/main/PRIVACY.md
+https://clip.spiralocean.com/privacy
 ```
 
 ---
@@ -151,20 +151,18 @@ https://github.com/spiralocean/omnifocus-chrome-extension/blob/main/PRIVACY.md
       published ID — the native host's `allowed_origins` is keyed to it. (Ping me
       with the ID and I'll do it.)
 
-## Canonical URLs (decided 2026-07-16)
+## Canonical URLs (live as of 2026-07-16)
 
-The **website is the single source of truth** for both stores. When
-`clip.spiralocean.com` is live:
+`clip.spiralocean.com` is deployed and public (Vercel project `clip`, A record
+`clip → 76.76.21.21` at IONOS, SSL provisioned). The **website is the single
+source of truth** for both stores:
 
 - Privacy policy → `https://clip.spiralocean.com/privacy` (the real text lives
-  here; repo `PRIVACY.md` becomes a short pointer to it, not a second copy).
-- Support / homepage → `https://clip.spiralocean.com`.
-- Point BOTH the Chrome listing and the Apple submission at these same URLs.
-
-Until the page exists, Chrome ships with the GitHub URLs above (editable after
-publish without re-review), then gets swapped to the domain once it's live.
-Apple effectively requires a working support **web page**, so the domain is
-close to a prerequisite there, not just polish.
+  here; repo `PRIVACY.md` is now a short pointer to it, not a second copy).
+- Support → `https://clip.spiralocean.com/support` · Homepage →
+  `https://clip.spiralocean.com`.
+- The fields above already use these. The Apple submission should use the same
+  URLs (Apple requires a working support web page).
 
 ## Optional polish (not blockers)
 - [ ] Reshoot screenshots with Project and Tag filled in — they currently read
