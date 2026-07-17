@@ -31,7 +31,12 @@ the background** so clipping never steals focus from the page you're reading.
 
 ## Install
 
-### Chrome / Brave (unpacked)
+### Chrome / Brave (Chrome Web Store)
+
+Install **[Web Clipper for OmniFocus](https://chromewebstore.google.com/detail/web-clipper-for-omnifocus/fnaebddmgddhcfdccfjpkinlbabeldcd)**
+from the Chrome Web Store — one click, and it auto-updates.
+
+### Chrome / Brave (unpacked, for development)
 
 1. Open `chrome://extensions` (or `brave://extensions`) and turn on
    **Developer mode**.
@@ -45,8 +50,10 @@ OmniFocus forward. To eliminate that entirely, install the native helper, which
 opens the URL with `open -g` (background):
 
 ```sh
-# Find the extension's ID at chrome://extensions (Developer mode → the ID under
-# "Web Clipper for OmniFocus"), then:
+# Chrome Web Store install — the extension ID is fixed:
+./native-host/install.sh fnaebddmgddhcfdccfjpkinlbabeldcd
+
+# For an unpacked build, use the ID shown at chrome://extensions instead:
 ./native-host/install.sh <extension-id>
 ```
 
