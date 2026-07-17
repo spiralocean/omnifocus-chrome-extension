@@ -55,7 +55,8 @@ Web Clipper for OmniFocus is an unofficial extension and is not affiliated with 
 - [ ] Screenshots (need ≥1; both are exactly 1280×800):
       - `docs/screenshots/01-article.png`
       - `docs/screenshots/02-youtube.png`
-- [ ] Store icon 128×128 — comes from the package (`icons/icon128.png`); no upload.
+- [ ] Store icon 128×128 — **upload manually**: `icons/icon128.png` (the manifest
+      icons feed the toolbar, not the store listing; the store needs its own).
 - [ ] Small promo tile 440×280 — optional, skip.
 
 **Official URL / Homepage**
@@ -63,11 +64,12 @@ Web Clipper for OmniFocus is an unofficial extension and is not affiliated with 
 https://clip.spiralocean.com
 ```
 
-**Support URL**
+**Support URL** (the listing uses a URL, not an email field)
 ```
 https://clip.spiralocean.com/support
 ```
-(Email alternative: clip@spiralocean.com)
+Note: Chrome requires a verified **contact email at the account level** (Account
+settings, not the listing) before you can publish. Use clip@spiralocean.com.
 
 ---
 
