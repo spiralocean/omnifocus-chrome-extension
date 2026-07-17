@@ -139,15 +139,14 @@ Mac App Store accepts any one of these sizes (need **at least 1**, up to 10):
       with API key BBX5APPZS8 (issuer b26a8e1e-...). UPLOAD SUCCEEDED.
 - [x] App record created in ASC (macOS, com.spiralocean.cliptoomnifocus).
 
-## Remaining (in App Store Connect, after build processing ~5–30 min)
+## Submitted — in review (2026-07-17)
 
-- [ ] Set the version to **1.0.0** (must match the build).
-- [ ] Attach the processed build to the 1.0.0 version.
-- [ ] **Export compliance**: the extension makes no network requests and uses no
-      non-exempt encryption → answer the encryption question as exempt / "No".
-- [ ] Paste the metadata fields above; set privacy = Data Not Collected.
-- [ ] Add Safari screenshots (see Screenshots section).
-- [ ] Submit for review.
+- [x] Version 1.0.0, build attached, export compliance answered, metadata +
+      screenshots in, privacy = Data Not Collected.
+- [x] **Submitted for review 2026-07-17.** Awaiting Apple App Review (often
+      ~24–48h for Mac). Watch for a possible trademark question on "for
+      OmniFocus" (see below) or a reviewer without OmniFocus installed — the
+      App Review notes above address the dependency.
 
 ---
 
