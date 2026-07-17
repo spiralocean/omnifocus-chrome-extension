@@ -140,8 +140,9 @@ https://clip.spiralocean.com/privacy
 
 ## 4. Submit
 
-- [ ] Save draft (each tab saves independently — do all three first).
-- [ ] **Submit for review.** First review usually takes a few days to ~a week.
+- [x] Save draft (each tab saves independently — do all three first).
+- [x] **Submitted for review 2026-07-17.** Awaiting Google review (a few days to
+      ~a week; `nativeMessaging` may add scrutiny or a reviewer question).
 
 ---
 
