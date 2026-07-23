@@ -16,6 +16,16 @@ const taskFlagEl = document.getElementById("task-flag");
 const statusEl = document.getElementById("status");
 const clipButton = document.getElementById("clip-button");
 const settingsButton = document.getElementById("open-settings");
+const previewEl = document.getElementById("preview");
+const previewLeadEl = document.getElementById("preview-lead");
+const previewNameEl = document.getElementById("preview-name");
+const previewProjectRow = document.getElementById("preview-project-row");
+const previewProjectEl = document.getElementById("preview-project");
+const previewTagRow = document.getElementById("preview-tag-row");
+const previewTagEl = document.getElementById("preview-tag");
+const previewNoteEl = document.getElementById("preview-note");
+const previewLinkEl = document.getElementById("preview-link");
+const copyLinkButton = document.getElementById("copy-link");
 
 /** @type {{ title: string, url: string, excerpt: string, selection: string, siteName: string } | null} */
 let pageData = null;
@@ -29,6 +39,7 @@ async function init() {
 
   form.addEventListener("submit", onSubmit);
   taskNoteEl.addEventListener("keydown", onNoteKeydown);
+  copyLinkButton.addEventListener("click", onCopyLink);
 
   if (!isMac()) {
     showError(OMNIFOCUS_MAC_REQUIRED);
@@ -101,19 +112,18 @@ async function onSubmit(event) {
   if (!pageData) return;
 
   clipButton.disabled = true;
+  previewEl.hidden = true;
   setStatus("Sending to OmniFocus…");
 
   const settings = await getSettings();
-  const url = buildClipUrlFromFields(
-    {
-      name: taskNameEl.value.trim(),
-      note: taskNoteEl.value.trim(),
-      project: taskProjectEl.value.trim(),
-      tag: taskTagEl.value.trim(),
-      flag: taskFlagEl.checked,
-    },
-    settings
-  );
+  const fields = {
+    name: taskNameEl.value.trim(),
+    note: taskNoteEl.value.trim(),
+    project: taskProjectEl.value.trim(),
+    tag: taskTagEl.value.trim(),
+    flag: taskFlagEl.checked,
+  };
+  const url = buildClipUrlFromFields(fields, settings);
 
   const response = await chrome.runtime.sendMessage({
     type: "OPEN_OMNIFOCUS_URL",
@@ -121,13 +131,72 @@ async function onSubmit(event) {
   });
 
   if (!response?.ok) {
-    showError(response?.error || "Could not open OmniFocus.");
+    showTaskPreview(fields, url);
     clipButton.disabled = false;
     return;
   }
 
   setStatus("Sent to OmniFocus.");
   window.setTimeout(() => window.close(), 600);
+}
+
+/**
+ * When the omnifocus:// handoff can't complete — most often because OmniFocus
+ * for Mac isn't installed — show the fully-built task and its link instead of a
+ * dead end, so the clip's output is visible and copyable without OmniFocus.
+ *
+ * @param {{ name: string, note: string, project: string, tag: string }} fields
+ * @param {string} url
+ */
+function showTaskPreview(fields, url) {
+  setStatus("");
+  previewLeadEl.textContent =
+    "OmniFocus for Mac didn’t respond, so the task wasn’t filed. Here’s exactly " +
+    "what the clipper built — copy its link, or install OmniFocus to file it.";
+  previewNameEl.textContent = fields.name || "Untitled";
+  setPreviewRow(previewProjectRow, previewProjectEl, fields.project);
+  setPreviewRow(previewTagRow, previewTagEl, fields.tag);
+  previewNoteEl.textContent = fields.note || "—";
+  previewLinkEl.value = url;
+  resetCopyLabel();
+  previewEl.hidden = false;
+  previewEl.scrollIntoView({ block: "nearest" });
+}
+
+/**
+ * @param {HTMLElement} row
+ * @param {HTMLElement} valueEl
+ * @param {string} value
+ */
+function setPreviewRow(row, valueEl, value) {
+  const has = Boolean(value);
+  row.hidden = !has;
+  valueEl.textContent = has ? value : "";
+}
+
+async function onCopyLink() {
+  const link = previewLinkEl.value;
+  let copied = false;
+
+  try {
+    await navigator.clipboard.writeText(link);
+    copied = true;
+  } catch {
+    previewLinkEl.focus();
+    previewLinkEl.select();
+    try {
+      copied = document.execCommand("copy");
+    } catch {
+      copied = false;
+    }
+  }
+
+  copyLinkButton.textContent = copied ? "Copied ✓" : "Press ⌘C to copy";
+  window.setTimeout(resetCopyLabel, 1600);
+}
+
+function resetCopyLabel() {
+  copyLinkButton.textContent = "Copy OmniFocus link";
 }
 
 async function getSettings() {

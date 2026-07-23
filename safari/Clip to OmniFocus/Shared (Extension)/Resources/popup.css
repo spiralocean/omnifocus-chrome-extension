@@ -225,6 +225,71 @@ body {
   transform: none;
 }
 
+.button--ghost {
+  color: var(--accent-deep);
+  background: rgba(91, 75, 138, 0.08);
+  border: 1px solid rgba(91, 75, 138, 0.2);
+}
+
+.button--ghost:hover {
+  background: var(--accent-soft);
+}
+
+.preview {
+  display: grid;
+  gap: 10px;
+  margin: 0 14px 10px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.preview__lead {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.preview__fields {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.preview__row {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.preview__row dt {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.preview__row dd {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+  max-height: 96px;
+  overflow-y: auto;
+}
+
+.preview__link {
+  min-height: 48px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+}
+
 .clipper__status {
   min-height: 16px;
   margin: 0;
