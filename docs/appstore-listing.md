@@ -129,7 +129,7 @@ This is an unofficial extension using the OmniFocus name nominatively (compatibi
 
 ---
 
-## Screenshots (Mac)  ← still needed
+## Screenshots (Mac)  ← DONE, uploaded with 1.0
 
 Mac App Store accepts any one of these sizes (need **at least 1**, up to 10):
 **1280×800**, 1440×900, 2560×1600, or 2880×1800.
@@ -152,14 +152,27 @@ Mac App Store accepts any one of these sizes (need **at least 1**, up to 10):
       with API key BBX5APPZS8 (issuer b26a8e1e-...). UPLOAD SUCCEEDED.
 - [x] App record created in ASC (macOS, com.spiralocean.cliptoomnifocus).
 
-## Submitted — in review (2026-07-17)
+## LIVE on the Mac App Store (2026-07-25)
+
+**https://apps.apple.com/us/app/web-clipper-for-omnifocus/id6791601135?mt=12**
 
 - [x] Version 1.0.0, build attached, export compliance answered, metadata +
       screenshots in, privacy = Data Not Collected.
-- [x] **Submitted for review 2026-07-17.** Awaiting Apple App Review (often
-      ~24–48h for Mac). Watch for a possible trademark question on "for
-      OmniFocus" (see below) or a reviewer without OmniFocus installed — the
-      App Review notes above address the dependency.
+- [x] Submitted for review 2026-07-17.
+- [x] Rejected 2026-07-20 under Guideline 2.1(a) — reviewer could not verify
+      the hand-off without OmniFocus installed. Fixed by adding the offline
+      "Task Preview" demo panel (`showTaskPreview()`), build bumped 1 → 2.
+- [x] Rejected again 2026-07-23 under Guideline 2.1 — reviewer wanted a demo
+      video of the app on a physical Mac. No code change; recorded the video,
+      hosted it at `https://clip.spiralocean.com/webclipper-demo.mp4`, added the
+      link to the App Review notes, replied in Resolution Center, resubmitted
+      2026-07-24.
+- [x] **Approved and released 2026-07-25.** State `READY_FOR_SALE`.
+- [ ] Cleanup: the demo video is still served from the clip site
+      (`~/clip.spiralocean.com/webclipper-demo.mp4`). It is linked from the App
+      Review notes, so keep it while 1.0 is the shipping version; delete the
+      file and redeploy when those notes are next rewritten.
+- Note: the trademark question below never came up in review.
 
 ---
 

@@ -59,6 +59,12 @@ opens the URL with `open -g` (background):
 
 Reload the extension afterward. To remove the helper: `./native-host/install.sh --uninstall`.
 
+### Safari (Mac App Store)
+
+Install **[Web Clipper for OmniFocus](https://apps.apple.com/us/app/web-clipper-for-omnifocus/id6791601135?mt=12)**
+from the Mac App Store, open it once, then enable **Clip to OmniFocus** in
+Safari → **Settings → Extensions**.
+
 ### Safari (build from source)
 
 The Safari version is an Xcode project under
