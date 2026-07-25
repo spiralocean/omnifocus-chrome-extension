@@ -100,10 +100,17 @@ All categories **None** → rating **4+**.
 
 ## App Review notes  ← important; reviewers won't have OmniFocus
 
+> **⚠️ Before the next submission:** the notes currently live in App Store
+> Connect still open with the demo-video link below, and that video was deleted
+> from clip.spiralocean.com on 2026-07-25 — the URL now 404s. It carries over to
+> the next version, so strip the first two lines (or re-host the video) before
+> submitting 1.1, or a reviewer's first action will be a dead link.
+> Notes live at `appStoreReviewDetails/451df662-6c0e-43f4-a58c-05a899c2f911`.
+
 ```
 Thank you for the review. As requested, a demonstration video showing the app running on a physical Mac, including all features and the extension's permission disclosure, is here:
 
-https://clip.spiralocean.com/webclipper-demo.mp4
+https://clip.spiralocean.com/webclipper-demo.mp4   ← DEAD as of 2026-07-25
 
 WHAT THE APP DOES
 Web Clipper for OmniFocus is a Safari web extension (packaged in this Mac app) that turns the current web page — its title, URL, and any selected text — into a new task in OmniFocus with one click.
@@ -168,10 +175,10 @@ Mac App Store accepts any one of these sizes (need **at least 1**, up to 10):
       link to the App Review notes, replied in Resolution Center, resubmitted
       2026-07-24.
 - [x] **Approved and released 2026-07-25.** State `READY_FOR_SALE`.
-- [ ] Cleanup: the demo video is still served from the clip site
-      (`~/clip.spiralocean.com/webclipper-demo.mp4`). It is linked from the App
-      Review notes, so keep it while 1.0 is the shipping version; delete the
-      file and redeploy when those notes are next rewritten.
+- [x] Cleanup: demo video deleted from the clip site and redeployed
+      2026-07-25 — `https://clip.spiralocean.com/webclipper-demo.mp4` now 404s.
+      The App Review notes in App Store Connect still reference it; see the
+      warning above the notes block before submitting the next version.
 - Note: the trademark question below never came up in review.
 
 ---
