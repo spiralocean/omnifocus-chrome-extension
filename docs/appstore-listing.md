@@ -100,18 +100,13 @@ All categories **None** → rating **4+**.
 
 ## App Review notes  ← important; reviewers won't have OmniFocus
 
-> **⚠️ Before the next submission:** the notes currently live in App Store
-> Connect still open with the demo-video link below, and that video was deleted
-> from clip.spiralocean.com on 2026-07-25 — the URL now 404s. It carries over to
-> the next version, so strip the first two lines (or re-host the video) before
-> submitting 1.1, or a reviewer's first action will be a dead link.
-> Notes live at `appStoreReviewDetails/451df662-6c0e-43f4-a58c-05a899c2f911`.
+This block is the text currently live in App Store Connect
+(`appStoreReviewDetails/451df662-6c0e-43f4-a58c-05a899c2f911`), verified
+2026-07-25. The demo-video link that led the 1.0 resubmission was stripped once
+the video came down, so nothing here points at a dead URL. Notes carry over to
+the next version — edit them here and PATCH, don't let the two drift.
 
 ```
-Thank you for the review. As requested, a demonstration video showing the app running on a physical Mac, including all features and the extension's permission disclosure, is here:
-
-https://clip.spiralocean.com/webclipper-demo.mp4   ← DEAD as of 2026-07-25
-
 WHAT THE APP DOES
 Web Clipper for OmniFocus is a Safari web extension (packaged in this Mac app) that turns the current web page — its title, URL, and any selected text — into a new task in OmniFocus with one click.
 
@@ -120,7 +115,7 @@ HOW TO ENABLE AND TEST
 2. Click the toolbar button (or right-click a page → "Clip page to OmniFocus"). The clipper reads the current page and creates the task.
 
 ABOUT PERMISSIONS
-The extension requests only the activeTab permission. It has no persistent access to any website — it can read a page only at the moment you invoke it (click the toolbar button, use the context menu, or the keyboard shortcut). Safari discloses this at enable time, under Settings → Extensions → Permissions ("Webpage Contents… on the current tab's webpage when you use the extension"), which is shown in the video (Settings → Extensions → Permissions). Because access is scoped to activeTab, Safari does not present a separate per-site permission dialog during normal use — this is expected for a minimal-permission extension, not a missing step.
+The extension requests only the activeTab permission. It has no persistent access to any website — it can read a page only at the moment you invoke it (click the toolbar button, use the context menu, or the keyboard shortcut). Safari discloses this at enable time, under Settings → Extensions → Permissions ("Webpage Contents… on the current tab's webpage when you use the extension"). Because access is scoped to activeTab, Safari does not present a separate per-site permission dialog during normal use — this is expected for a minimal-permission extension, not a missing step.
 
 REVIEWING WITHOUT OMNIFOCUS INSTALLED
 The app hands the finished task to OmniFocus via the standard omnifocus:// URL scheme. If OmniFocus is not installed on the review device, the extension detects this and displays an offline "Task Preview" panel showing the fully built task (name, project, tag, note) along with the omnifocus:// link and a Copy button — so the extension's behavior can be fully verified without installing any other app.
