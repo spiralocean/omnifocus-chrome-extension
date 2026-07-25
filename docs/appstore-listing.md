@@ -101,15 +101,28 @@ All categories **None** → rating **4+**.
 ## App Review notes  ← important; reviewers won't have OmniFocus
 
 ```
-This app installs a Safari web extension that creates tasks in OmniFocus for Mac.
+Thank you for the review. As requested, a demonstration video showing the app running on a physical Mac, including all features and the extension's permission disclosure, is here:
 
-TO TEST:
-1. Launch the app once; it explains how to enable the extension.
-2. In Safari → Settings → Extensions, enable "Web Clipper for OmniFocus" and allow it on the current site.
-3. Click the toolbar button (or right-click → Clip page to OmniFocus) on any web page.
-4. The extension builds an omnifocus:// task URL and hands it to OmniFocus.
+https://clip.spiralocean.com/webclipper-demo.mp4
 
-NOTE: Creating the task requires OmniFocus for Mac to be installed (free trial available from The Omni Group at https://www.omnigroup.com/omnifocus/). If OmniFocus is not installed, the extension shows an error explaining it is required — this is expected behavior, not a bug. The extension makes no network requests and collects no data.
+WHAT THE APP DOES
+Web Clipper for OmniFocus is a Safari web extension (packaged in this Mac app) that turns the current web page — its title, URL, and any selected text — into a new task in OmniFocus with one click.
+
+HOW TO ENABLE AND TEST
+1. Open Safari → Settings → Extensions and turn on "Web Clipper for OmniFocus."
+2. Click the toolbar button (or right-click a page → "Clip page to OmniFocus"). The clipper reads the current page and creates the task.
+
+ABOUT PERMISSIONS
+The extension requests only the activeTab permission. It has no persistent access to any website — it can read a page only at the moment you invoke it (click the toolbar button, use the context menu, or the keyboard shortcut). Safari discloses this at enable time, under Settings → Extensions → Permissions ("Webpage Contents… on the current tab's webpage when you use the extension"), which is shown in the video (Settings → Extensions → Permissions). Because access is scoped to activeTab, Safari does not present a separate per-site permission dialog during normal use — this is expected for a minimal-permission extension, not a missing step.
+
+REVIEWING WITHOUT OMNIFOCUS INSTALLED
+The app hands the finished task to OmniFocus via the standard omnifocus:// URL scheme. If OmniFocus is not installed on the review device, the extension detects this and displays an offline "Task Preview" panel showing the fully built task (name, project, tag, note) along with the omnifocus:// link and a Copy button — so the extension's behavior can be fully verified without installing any other app.
+
+OPTIONAL COMPONENTS (not required to review)
+- An optional native messaging helper lets the task open in the background without switching apps. It is installed manually by the user and is not required for core functionality.
+- The extension optionally posts a local "Clipped to OmniFocus" confirmation; notifications are optional and not required.
+
+No account, login, or network server is required. All processing is local to the device. The extension makes no network requests and collects no data.
 
 This is an unofficial extension using the OmniFocus name nominatively (compatibility). It is not affiliated with or endorsed by The Omni Group.
 ```
