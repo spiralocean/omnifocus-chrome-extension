@@ -112,8 +112,32 @@ async function sendToNativeHost(ofUrl, activate) {
     // The promise form works in both Chrome MV3 and Safari. In Chrome a
     // missing host rejects; in Safari the handler always responds.
     const response = await runtime.sendNativeMessage(NATIVE_HOST, {
+      action: "open",
       url: ofUrl,
       activate,
+    });
+    if (!response) return { available: false };
+    return { available: true, ok: Boolean(response.ok), error: response.error };
+  } catch {
+    return { available: false };
+  }
+}
+
+/**
+ * Ask native code to find the most recently created OmniFocus task with this
+ * name and open its omnifocus:///task/… URL (activating OmniFocus).
+ *
+ * @param {string} taskName
+ * @returns {Promise<{ available: boolean, ok?: boolean, error?: string }>}
+ */
+async function revealTaskViaNativeHost(taskName) {
+  const runtime = nativeRuntime();
+  if (!runtime) return { available: false };
+
+  try {
+    const response = await runtime.sendNativeMessage(NATIVE_HOST, {
+      action: "reveal-task",
+      name: taskName,
     });
     if (!response) return { available: false };
     return { available: true, ok: Boolean(response.ok), error: response.error };
@@ -170,4 +194,26 @@ export async function openOmniFocusUrl(ofUrl, options = {}) {
       void chrome.runtime.lastError;
     });
   }
+}
+
+/**
+ * Open the clipped task in OmniFocus (user clicked the confirmation toast).
+ * Prefers a native lookup of the task by name; falls back to activating
+ * OmniFocus so at least the app comes forward.
+ *
+ * @param {string} taskName
+ * @returns {Promise<void>}
+ */
+export async function openClippedTask(taskName) {
+  const name = (taskName || "").trim();
+  if (name) {
+    const native = await revealTaskViaNativeHost(name);
+    if (native.available) {
+      if (native.ok) return;
+      // Native host is installed but couldn't resolve the task (no match,
+      // Automation denied, …). Still bring OmniFocus forward.
+    }
+  }
+
+  await openOmniFocusUrl("omnifocus:///", { returnFocus: false });
 }

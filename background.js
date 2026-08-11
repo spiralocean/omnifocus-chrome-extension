@@ -4,9 +4,14 @@ import {
   defaultTaskName,
 } from "./src/omnifocus.js";
 import { extractPageData } from "./src/extract-page.js";
-import { openOmniFocusUrl } from "./src/open-omnifocus.js";
+import { openClippedTask, openOmniFocusUrl } from "./src/open-omnifocus.js";
 import { isMac, OMNIFOCUS_MAC_REQUIRED } from "./src/platform.js";
-import { showExtensionNotification } from "./src/notifications.js";
+import {
+  cancelAutoHide,
+  rememberClipNotification,
+  showExtensionNotification,
+  takeClipNotification,
+} from "./src/notifications.js";
 
 const MENU_PAGE = "clip-page";
 const MENU_SELECTION = "clip-selection";
@@ -24,6 +29,27 @@ chrome.runtime.onInstalled.addListener(() => {
     contexts: ["selection"],
   });
 });
+
+// Clicking a success toast opens that task in OmniFocus.
+if (chrome.notifications?.onClicked) {
+  chrome.notifications.onClicked.addListener((notificationId) => {
+    // Async work inside the listener: MV3 keeps the worker alive for the
+    // returned promise from an async listener in Chromium; wrap explicitly
+    // so a rejection never surfaces as an unhandled rejection.
+    (async () => {
+      cancelAutoHide();
+      const target = await takeClipNotification(notificationId);
+      chrome.notifications.clear(notificationId);
+      if (!target?.taskName) return;
+      try {
+        await openClippedTask(target.taskName);
+      } catch {
+        // Best-effort: a failed open after a successful clip is not worth
+        // another error toast (the task is already filed).
+      }
+    })();
+  });
+}
 
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   if (!tab?.id) return;
@@ -60,7 +86,21 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
           returnFocus: settings.activateOmniFocus === false,
         })
       )
-      .then(() => sendResponse({ ok: true }))
+      .then(() => {
+        // Answer first: the clip is already filed at this point, so the popup's
+        // confirmation must not wait on — or be lost to — the notification path.
+        sendResponse({ ok: true });
+
+        // Popup clips close the window before the user can read status text;
+        // mirror the keyboard/context-menu confirmation here.
+        if (message.notify !== false) {
+          const taskName =
+            typeof message.taskName === "string" && message.taskName.trim()
+              ? message.taskName.trim()
+              : "Web page";
+          return notifyClipSuccessName(taskName);
+        }
+      })
       .catch((error) =>
         sendResponse({
           ok: false,
@@ -114,7 +154,7 @@ async function clipFromTab(tab, options = {}) {
     await openOmniFocusUrl(url, {
       returnFocus: settings.activateOmniFocus === false,
     });
-    await notifyClipSuccess(pageData);
+    await notifyClipSuccess(pageData, options.overrides?.name);
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Could not open OmniFocus.";
@@ -140,16 +180,28 @@ async function getSettings() {
 
 /**
  * @param {{ title?: string, siteName?: string }} pageData
+ * @param {string} [overrideName]
  */
-async function notifyClipSuccess(pageData) {
+async function notifyClipSuccess(pageData, overrideName) {
   const taskName =
-    defaultTaskName(pageData.title || "", pageData.siteName) || "Web page";
-  await showExtensionNotification("Clipped to OmniFocus", taskName);
+    (overrideName && overrideName.trim()) ||
+    defaultTaskName(pageData.title || "", pageData.siteName) ||
+    "Web page";
+  await notifyClipSuccessName(taskName);
+}
+
+/**
+ * @param {string} taskName
+ */
+async function notifyClipSuccessName(taskName) {
+  const id = await showExtensionNotification("Clipped to OmniFocus", taskName);
+  if (id) await rememberClipNotification(id, taskName);
 }
 
 /**
  * @param {string} message
  */
 async function notifyClipFailure(message) {
+  // No rememberClipNotification — clicking an error toast should not open OF.
   await showExtensionNotification("Web Clipper for OmniFocus", message);
 }

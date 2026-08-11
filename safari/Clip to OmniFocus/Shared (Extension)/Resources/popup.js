@@ -128,6 +128,7 @@ async function onSubmit(event) {
   const response = await chrome.runtime.sendMessage({
     type: "OPEN_OMNIFOCUS_URL",
     url,
+    taskName: fields.name || "Web page",
   });
 
   if (!response?.ok) {

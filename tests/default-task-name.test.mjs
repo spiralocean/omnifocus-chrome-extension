@@ -10,7 +10,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { defaultTaskName } from "../src/omnifocus.js";
+import {
+  composeNote,
+  defaultTaskName,
+  formatClipNote,
+  NOTE_MAX_LENGTH,
+} from "../src/omnifocus.js";
 
 test("keeps a dash that is content, not a site suffix", () => {
   // extract-page.js already strips " - YouTube", so anything left is the
@@ -73,4 +78,27 @@ test("truncates past the OmniFocus URL length budget", () => {
   const name = defaultTaskName("x".repeat(600), "example.com");
   assert.equal(name.length, 500);
   assert.ok(name.endsWith("…"));
+});
+
+test("composeNote keeps the URL and only trims a long body", () => {
+  const url = "https://x.com/user/status/1234567890123456789";
+  const body = "A".repeat(NOTE_MAX_LENGTH);
+  const note = composeNote(url, body, NOTE_MAX_LENGTH);
+  assert.ok(note.startsWith(url + "\n\n"));
+  assert.ok(note.length <= NOTE_MAX_LENGTH);
+  assert.ok(note.endsWith("…"));
+  // Old whole-string truncate at 1200 would leave almost no body room after URL.
+  assert.ok(note.length > 1200, "budget must fit long X posts past the old 1200 cap");
+});
+
+test("formatClipNote fits a long X-style post under the raised budget", () => {
+  const url = "https://x.com/foo/status/99";
+  // Premium long post-ish length (~4k) should fit entirely with URL.
+  const excerpt = "Line one.\n\n" + "word ".repeat(800);
+  const note = formatClipNote({ url, excerpt });
+  assert.ok(note.includes("Line one."));
+  assert.ok(note.startsWith(url));
+  assert.ok(note.length <= NOTE_MAX_LENGTH);
+  // Should not need ellipsis for ~4k body + URL under 8000.
+  assert.ok(!note.endsWith("…"));
 });

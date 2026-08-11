@@ -3,8 +3,9 @@ import Foundation
 /// Swift port of the shared OmniFocus URL-scheme helpers (`src/omnifocus.js`).
 /// Keep this in sync with the Chrome/Safari extension so clips behave identically.
 enum OmniFocusURL {
-    // Keep notes short enough for omnifocus:// URL limits.
-    static let noteMaxLength = 1200
+    // Keep notes short enough for omnifocus:// URL limits (match omnifocus.js).
+    // 1200 was cutting long X posts; 8000 leaves headroom after percent-encoding.
+    static let noteMaxLength = 8000
     static let nameMaxLength = 500
 
     /// Mirrors JS `encodeURIComponent` — encodes everything except the
@@ -53,13 +54,28 @@ enum OmniFocusURL {
         return "Untitled"
     }
 
-    /// Mirrors `formatClipNote`: note is the source URL plus the selection or excerpt.
+    /// Mirrors `composeNote` / `formatClipNote`: keep the URL intact, trim body only.
     static func formatClipNote(title: String, url: String, excerpt: String, selection: String) -> String {
         let body = selection.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             ? excerpt.trimmingCharacters(in: .whitespacesAndNewlines)
             : selection.trimmingCharacters(in: .whitespacesAndNewlines)
-        let defaultNote = body.isEmpty ? url : "\(url)\n\n\(body)"
-        return truncate(defaultNote, noteMaxLength)
+        return composeNote(url: url, body: body, max: noteMaxLength)
+    }
+
+    /// Prefer keeping the source URL intact and trimming only the body.
+    static func composeNote(url: String, body: String, max: Int = noteMaxLength) -> String {
+        let link = url.trimmingCharacters(in: .whitespacesAndNewlines)
+        let text = body.trimmingCharacters(in: .whitespacesAndNewlines)
+        if text.isEmpty { return truncate(link, max) }
+        if link.isEmpty { return truncate(text, max) }
+
+        let sep = "\n\n"
+        let overhead = link.count + sep.count
+        if overhead >= max { return truncate(link, max) }
+
+        let bodyBudget = max - overhead
+        if text.count <= bodyBudget { return "\(link)\(sep)\(text)" }
+        return "\(link)\(sep)\(truncate(text, bodyBudget))"
     }
 
     /// Mirrors `buildOmniFocusAddUrl`. `autosave` selects the x-callback path

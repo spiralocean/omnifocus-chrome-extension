@@ -28,8 +28,23 @@ class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
 
         os_log("native request: %{public}@", log: nativeLog, type: .default, String(describing: message))
 
-        guard let dict = message as? [String: Any],
-              let urlString = dict["url"] as? String,
+        guard let dict = message as? [String: Any] else {
+            complete(context, with: ["ok": false, "error": "Invalid message."])
+            return
+        }
+
+        let action = (dict["action"] as? String) ?? "open"
+
+        if action == "reveal-task" {
+            handleRevealTask(dict, context: context)
+            return
+        }
+
+        handleOpen(dict, context: context)
+    }
+
+    private func handleOpen(_ dict: [String: Any], context: NSExtensionContext) {
+        guard let urlString = dict["url"] as? String,
               urlString.hasPrefix("omnifocus://"),
               let url = URL(string: urlString) else {
             complete(context, with: ["ok": false, "error": "Refused non-OmniFocus URL."])
@@ -45,7 +60,79 @@ class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
         }
     }
 
+    private func handleRevealTask(_ dict: [String: Any], context: NSExtensionContext) {
+        guard let name = dict["name"] as? String, !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            complete(context, with: ["ok": false, "error": "Missing task name."])
+            return
+        }
+
+        #if os(macOS)
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            let result = self?.revealTask(named: name) ?? ["ok": false, "error": "Reveal unavailable."]
+            os_log("reveal-task result: %{public}@", log: nativeLog, type: .default, String(describing: result))
+            DispatchQueue.main.async {
+                self?.complete(context, with: result)
+            }
+        }
+        #else
+        complete(context, with: ["ok": false, "error": "Clip to OmniFocus requires macOS."])
+        #endif
+    }
+
     #if os(macOS)
+    /// Look up the newest OmniFocus task with this name and open its task URL.
+    private func revealTask(named name: String) -> [String: Any] {
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let taskId = findTaskId(named: trimmed), !taskId.isEmpty else {
+            return ["ok": false, "error": "Task not found."]
+        }
+
+        guard let url = URL(string: "omnifocus:///task/\(taskId)") else {
+            return ["ok": false, "error": "Invalid task URL."]
+        }
+
+        // Notification clicks always want OmniFocus in front with the task selected.
+        let semaphore = DispatchSemaphore(value: 0)
+        var openResult: [String: Any] = ["ok": false, "error": "Open timed out."]
+        open(url: url, activate: true) { result in
+            openResult = result
+            semaphore.signal()
+        }
+        _ = semaphore.wait(timeout: .now() + 8)
+        return openResult
+    }
+
+    private func findTaskId(named name: String) -> String? {
+        let escaped = name
+            .replacingOccurrences(of: "\\", with: "\\\\")
+            .replacingOccurrences(of: "\"", with: "\\\"")
+
+        let source = """
+        tell application "OmniFocus"
+          tell default document
+            set matches to flattened tasks whose name is "\(escaped)"
+            if (count of matches) is 0 then return ""
+            set best to item 1 of matches
+            set bestDate to creation date of best
+            repeat with t in matches
+              if creation date of t comes after bestDate then
+                set best to t
+                set bestDate to creation date of t
+              end if
+            end repeat
+            return id of best as string
+          end tell
+        end tell
+        """
+
+        var error: NSDictionary?
+        guard let script = NSAppleScript(source: source) else { return nil }
+        let output = script.executeAndReturnError(&error)
+        if error != nil { return nil }
+        let taskId = output.stringValue?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return taskId.isEmpty ? nil : taskId
+    }
+
     private func open(url: URL, activate: Bool, completion: @escaping ([String: Any]) -> Void) {
         if #available(macOS 10.15, *) {
             let configuration = NSWorkspace.OpenConfiguration()

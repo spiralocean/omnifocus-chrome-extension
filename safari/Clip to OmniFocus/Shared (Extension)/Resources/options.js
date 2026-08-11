@@ -13,6 +13,9 @@ const flagEl = document.getElementById("flag");
 const autosaveEl = document.getElementById("autosave");
 const activateOmniFocusEl = document.getElementById("activate-omnifocus");
 const revealNewItemEl = document.getElementById("reveal-new-item");
+const notificationStayVisibleEl = document.getElementById(
+  "notification-stay-visible"
+);
 const statusEl = document.getElementById("status");
 const shortcutsEl = document.getElementById("shortcuts");
 const shortcutsHelpEl = document.getElementById("shortcuts-help");
@@ -39,6 +42,7 @@ async function init() {
   autosaveEl.checked = settings.autosave !== false;
   activateOmniFocusEl.checked = settings.activateOmniFocus !== false;
   revealNewItemEl.checked = Boolean(settings.revealNewItem);
+  notificationStayVisibleEl.checked = Boolean(settings.notificationStayVisible);
 
   syncRevealNewItemState();
   activateOmniFocusEl.addEventListener("change", syncRevealNewItemState);
@@ -148,6 +152,7 @@ async function onSubmit(event) {
     autosave: autosaveEl.checked,
     activateOmniFocus: activateOmniFocusEl.checked,
     revealNewItem: revealNewItemEl.checked,
+    notificationStayVisible: notificationStayVisibleEl.checked,
   });
 
   statusEl.textContent = "Settings saved.";

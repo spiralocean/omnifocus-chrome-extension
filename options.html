@@ -64,6 +64,16 @@
           <span>Reveal new item in OmniFocus after clipping</span>
         </label>
 
+        <label class="checkbox">
+          <input type="checkbox" id="notification-stay-visible" />
+          <span>Keep clip notification visible until dismissed</span>
+        </label>
+        <p class="field__hint">
+          Clip confirmations are browser toasts (not macOS Notification Center).
+          Off = hide automatically after about 5 seconds. On = stay on screen
+          until you click the toast (opens the task) or dismiss it.
+        </p>
+
         <div class="settings__actions">
           <button type="submit" class="button">Save settings</button>
           <p class="settings__status" id="status" role="status" aria-live="polite"></p>

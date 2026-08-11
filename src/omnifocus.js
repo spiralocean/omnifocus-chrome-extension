@@ -2,9 +2,11 @@
  * Shared OmniFocus URL scheme helpers.
  */
 
-// Keep notes short enough for omnifocus:// URL limits in Chrome.
-const NOTE_MAX_LENGTH = 1200;
-const NAME_MAX_LENGTH = 500;
+// Notes travel in an omnifocus:// URL (percent-encoded). Keep headroom for the
+// name/project/query overhead and encoding expansion, but leave enough room for
+// long X posts (Premium ~4k–25k) and long excerpts. 1200 was cutting long posts.
+export const NOTE_MAX_LENGTH = 8000;
+export const NAME_MAX_LENGTH = 500;
 
 /**
  * @param {Record<string, string | boolean | undefined | null>} params
@@ -27,6 +29,33 @@ export function buildOmniFocusAddUrl(params, options = {}) {
 }
 
 /**
+ * Prefer keeping the source URL intact and trimming only the body/excerpt.
+ * Blind whole-note truncation used to eat the end of long X posts.
+ *
+ * @param {string} url
+ * @param {string} body
+ * @param {number} max
+ * @returns {string}
+ */
+export function composeNote(url, body, max = NOTE_MAX_LENGTH) {
+  const link = (url || "").trim();
+  const text = (body || "").trim();
+  if (!text) return truncate(link, max);
+  if (!link) return truncate(text, max);
+
+  const sep = "\n\n";
+  const overhead = link.length + sep.length;
+  if (overhead >= max) {
+    // Pathological: URL alone exceeds budget — still prefer a usable link.
+    return truncate(link, max);
+  }
+
+  const bodyBudget = max - overhead;
+  if (text.length <= bodyBudget) return `${link}${sep}${text}`;
+  return `${link}${sep}${truncate(text, bodyBudget)}`;
+}
+
+/**
  * @param {{ url: string, excerpt?: string, selection?: string }} input
  * @param {string} [template]
  * @returns {string}
@@ -36,10 +65,9 @@ export function formatClipNote(
   template
 ) {
   const body = selection.trim() || excerpt.trim();
-  const defaultNote = body ? `${url}\n\n${body}` : url;
 
   if (!template) {
-    return truncate(defaultNote, NOTE_MAX_LENGTH);
+    return composeNote(url, body, NOTE_MAX_LENGTH);
   }
 
   const note = template
@@ -48,7 +76,10 @@ export function formatClipNote(
     .replace(/\{selection\}/g, selection.trim())
     .replace(/\{title\}/g, title.trim());
 
-  return truncate(note.trim() || defaultNote, NOTE_MAX_LENGTH);
+  const filled = note.trim();
+  if (!filled) return composeNote(url, body, NOTE_MAX_LENGTH);
+  // Custom templates may interleave fields; fall back to whole-string trim.
+  return truncate(filled, NOTE_MAX_LENGTH);
 }
 
 /**
@@ -58,6 +89,7 @@ export function formatClipNote(
  */
 export function truncate(text, max) {
   if (text.length <= max) return text;
+  if (max <= 1) return "…".slice(0, max);
   return `${text.slice(0, max - 1)}…`;
 }
 
@@ -151,6 +183,7 @@ export function defaultTaskName(title, siteName = "") {
  * @property {boolean} revealNewItem
  * @property {boolean} activateOmniFocus
  * @property {boolean} autosave
+ * @property {boolean} notificationStayVisible
  * @property {string} noteTemplate
  */
 
@@ -162,6 +195,9 @@ export const DEFAULT_SETTINGS = {
   revealNewItem: false,
   activateOmniFocus: false,
   autosave: true,
+  // Chrome extension toasts auto-hide after a few seconds unless this is on
+  // (requireInteraction). They are not macOS Notification Center items.
+  notificationStayVisible: false,
   noteTemplate: "",
 };
 
