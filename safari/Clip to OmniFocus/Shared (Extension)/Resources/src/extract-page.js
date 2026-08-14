@@ -305,112 +305,113 @@ export async function extractPageData() {
     }
   }
 
+  /** Author statusId → best body seen so far (survives virtualized unmounts). */
+  /** @type {Map<string, string>} */
+  const harvestedXTexts = new Map();
+
   /**
-   * Score a candidate thread: more parts win, then more characters.
-   * @param {string[]} parts
+   * @param {string} id
+   * @param {string} text
    */
-  function threadScore(parts) {
-    if (!parts || parts.length === 0) return 0;
-    let chars = 0;
-    for (const p of parts) chars += p.length;
-    return parts.length * 1_000_000 + chars;
+  function rememberXText(id, text) {
+    if (!id || !text) return;
+    const prev = harvestedXTexts.get(id);
+    if (!prev || text.length > prev.length) harvestedXTexts.set(id, text);
   }
 
   /**
-   * Same-author cards from the live conversation column (status pages show the
-   * self-thread as consecutive articles before other people's replies).
+   * @param {Element} article
    * @param {string} handle
-   * @param {string} statusId
-   * @returns {string[]}
    */
-  function collectXThreadFromDom(handle, statusId) {
+  function isAuthorXArticle(article, handle) {
     const handleLc = handle.toLowerCase();
-    const articles = topLevelXArticles();
-    /** @type {{ statusId: string, text: string, isAuthor: boolean, marker: { n: number, total: number } | null }[]} */
-    const cards = [];
-
-    for (const article of articles) {
-      const author = authorHandleFromXArticle(article);
-      const sid = statusIdFromXArticle(article);
-      const authorStatus = article.querySelector(
+    const author = authorHandleFromXArticle(article);
+    if (author && author.toLowerCase() === handleLc) return true;
+    return Boolean(
+      article.querySelector(
         `a[href*="/${handle}/status/"], a[href*="/${handleLc}/status/"]`
-      );
-      const isAuthor =
-        (author && author.toLowerCase() === handleLc) || Boolean(authorStatus);
+      )
+    );
+  }
 
+  /** Copy currently mounted same-author cards into the harvest map. */
+  function harvestVisibleXAuthorPosts(handle) {
+    for (const article of topLevelXArticles()) {
+      if (!isAuthorXArticle(article, handle)) continue;
+      const sid = statusIdFromXArticle(article);
       const text = textFromXArticle(article);
-      if (!text) continue;
-      cards.push({
-        statusId: sid,
-        text,
-        isAuthor,
-        marker: parseThreadMarker(text),
-      });
+      if (sid && text) rememberXText(sid, text);
     }
-
-    const numbered = cards
-      .filter((c) => c.isAuthor && c.marker)
-      .map((c) => ({
-        n: c.marker.n,
-        total: c.marker.total,
-        text: c.text,
-      }));
-    const assembled = assembleNumberedThread(numbered);
-    if (assembled.length > 1) return assembled;
-
-    // Unnumbered self-thread: contiguous same-author run that includes the
-    // opened status (expand upward for earlier thread posts too).
-    if (cards.length === 0) return [];
-    let rootIdx = cards.findIndex((c) => c.statusId === statusId);
-    if (rootIdx < 0) rootIdx = cards.findIndex((c) => c.isAuthor);
-    if (rootIdx < 0) return [];
-
-    let start = rootIdx;
-    while (start > 0 && cards[start - 1].isAuthor) start--;
-    let end = rootIdx;
-    while (end < cards.length - 1 && cards[end + 1].isAuthor) end++;
-
-    return cards
-      .slice(start, end + 1)
-      .filter((c) => c.isAuthor)
-      .map((c) => c.text);
   }
 
   /**
-   * Pull thread bodies from embedded page JSON (SSR / hydration).
-   * 1) Numbered (1/8)…(N/N) threads
-   * 2) Unnumbered self-threads: all same-author status IDs near the opened post
-   *    (e.g. 18 "Truth N" posts with no markers), via full_text + path order.
-   *
-   * @param {string} handle
-   * @param {string} statusId
-   * @returns {string[]}
+   * Expand truncated tweet bodies and "Show more replies" cells in the
+   * conversation column. Do not click <a href> "Show this thread" — that
+   * navigates away.
    */
-  function collectXThreadFromEmbed(handle, statusId) {
-    const html = document.documentElement?.innerHTML || "";
-    if (!html || html.length < 1000) return [];
+  function expandVisibleXConversation() {
+    const root =
+      document.querySelector('[data-testid="primaryColumn"]') || document.body;
+    if (!root) return;
+    for (const el of root.querySelectorAll(
+      '[data-testid="tweet-text-show-more-link"]'
+    )) {
+      try {
+        el.click();
+      } catch {
+        // ignore
+      }
+    }
+    const want =
+      /show more replies|show additional replies|show probable spam|show post/i;
+    for (const el of root.querySelectorAll('div[role="button"], button')) {
+      const label = (el.innerText || "").replace(/\s+/g, " ").trim();
+      if (!label || label.length > 72) continue;
+      if (!want.test(label)) continue;
+      try {
+        el.click();
+      } catch {
+        // ignore
+      }
+    }
+  }
 
+  /**
+   * Pull full_text out of embedded page JSON. Only keep bodies for this
+   * author's /handle/status/ IDs (or IDs already harvested from the DOM).
+   * @param {string} handle
+   * @returns {{ n: number, total: number, text: string }[]}
+   */
+  function harvestXEmbedTexts(handle) {
+    const html = document.documentElement?.innerHTML || "";
     /** @type {{ n: number, total: number, text: string }[]} */
     const numberedItems = [];
+    if (!html || html.length < 1000) return numberedItems;
 
     const considerNumbered = (text) => {
       const trimmed = (text || "").trim();
       if (!trimmed) return;
-      const m =
-        trimmed.match(/\((?:🧵\s*)?(\d+)\s*\/\s*(\d+)\)\s*$/) ||
-        trimmed.match(
-          /\((?:🧵\s*)?(\d+)\s*\/\s*(\d+)\)\s+https?:\/\/t\.co\/\w+\s*$/
-        );
-      if (!m) return;
-      const n = Number(m[1]);
-      const total = Number(m[2]);
+      const marker = parseThreadMarker(trimmed);
+      const withLink = trimmed.match(
+        /\((?:🧵\s*)?(\d+)\s*\/\s*(\d+)\)\s+https?:\/\/t\.co\/\w+\s*$/
+      );
+      if (marker) {
+        numberedItems.push({
+          n: marker.n,
+          total: marker.total,
+          text: trimmed,
+        });
+        return;
+      }
+      if (!withLink) return;
+      const n = Number(withLink[1]);
+      const total = Number(withLink[2]);
       if (!Number.isFinite(n) || !Number.isFinite(total) || total < 2) return;
       numberedItems.push({ n, total, text: trimmed });
     };
 
-    // rest_id → best full_text (unnumbered threads + single posts)
     /** @type {Map<string, string>} */
-    const textById = new Map();
+    const rawById = new Map();
     const restRe = /rest_id:"(\d+)"/g;
     let m;
     while ((m = restRe.exec(html))) {
@@ -421,60 +422,51 @@ export async function extractPageData() {
       const text = decodeXFullText(ft[1]).trim();
       if (!text) continue;
       considerNumbered(text);
-      const prev = textById.get(sid);
-      if (!prev || text.length > prev.length) textById.set(sid, text);
+      const prev = rawById.get(sid);
+      if (!prev || text.length > prev.length) rawById.set(sid, text);
     }
 
-    // Also scan raw full_text / long note strings for (n/m) markers only.
     const fullTextRe = /full_text:"((?:[^"\\]|\\.)*)"/g;
     while ((m = fullTextRe.exec(html))) considerNumbered(decodeXFullText(m[1]));
     const longRe =
       /"((?:[^"\\]|\\.){40,}?\((?:🧵\s*)?\d+\s*\/\s*\d+\)(?:\s+https?:\\\/\\\/t\.co\\\/\w+)?)"/g;
     while ((m = longRe.exec(html))) considerNumbered(decodeXFullText(m[1]));
 
-    const numbered = assembleNumberedThread(numberedItems);
-    if (numbered.length > 1) return numbered;
+    const escaped = handle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const pathRe = new RegExp(`/${escaped}/status/(\\d+)`, "gi");
+    while ((m = pathRe.exec(html))) {
+      const text = rawById.get(m[1]);
+      if (text) rememberXText(m[1], text);
+    }
+    // Fill bodies for IDs we already know are the author's (from the DOM).
+    for (const [id, text] of rawById) {
+      if (harvestedXTexts.has(id)) rememberXText(id, text);
+    }
 
-    // --- Unnumbered self-thread ---
-    // Candidate IDs = author status path links ∪ tweet- entries ∪ every
-    // rest_id that has full_text near the opened post's snowflake time.
-    // Live X often only paints a few /handle/status/ links until you scroll;
-    // full_text for the whole thread may already be in the page payload.
+    return numberedItems;
+  }
+
+  /**
+   * Cluster harvested author IDs around the opened status by snowflake time.
+   * @param {string} statusId
+   * @returns {string[]}
+   */
+  function assembleUnnumberedFromHarvest(statusId) {
     const rootMs = snowflakeMs(statusId);
     const WINDOW_MS = 2 * 60 * 60 * 1000;
     const MAX_GAP_MS = 15 * 60 * 1000;
 
-    /** @type {Set<string>} */
-    const candidateIds = new Set();
-    if (statusId) candidateIds.add(statusId);
+    /** @type {string[]} */
+    let cluster = [...harvestedXTexts.keys()];
+    if (statusId && !harvestedXTexts.has(statusId)) cluster.push(statusId);
+    if (cluster.length === 0) return [];
 
-    const escaped = handle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const pathRe = new RegExp(`/${escaped}/status/(\\d+)`, "gi");
-    while ((m = pathRe.exec(html))) candidateIds.add(m[1]);
-
-    const tweetRe = /tweet-(\d{15,})/g;
-    while ((m = tweetRe.exec(html))) {
-      if (textById.has(m[1])) candidateIds.add(m[1]);
-    }
-
-    for (const id of textById.keys()) {
-      const ms = snowflakeMs(id);
-      if (!rootMs || Math.abs(ms - rootMs) <= WINDOW_MS) candidateIds.add(id);
-    }
-
-    if (candidateIds.size === 0) {
-      const single = textById.get(statusId);
-      return single ? [single] : [];
-    }
-
-    // Sort by post time (snowflake), then id.
-    let cluster = [...candidateIds].sort((a, b) => {
+    cluster.sort((a, b) => {
       const d = snowflakeMs(a) - snowflakeMs(b);
       if (d !== 0) return d;
       return a < b ? -1 : a > b ? 1 : 0;
     });
 
-    // Prefer the time window around the opened status when we have a root.
     if (rootMs) {
       const inWindow = cluster.filter(
         (id) => Math.abs(snowflakeMs(id) - rootMs) <= WINDOW_MS
@@ -482,10 +474,8 @@ export async function extractPageData() {
       if (inWindow.length > 0) cluster = inWindow;
     }
 
-    // Contiguous run around the opened id (small consecutive gaps).
     let rootIdx = cluster.indexOf(statusId);
     if (rootIdx < 0) {
-      // Nearest id by time.
       let best = 0;
       let bestDelta = Infinity;
       for (let i = 0; i < cluster.length; i++) {
@@ -509,66 +499,65 @@ export async function extractPageData() {
       if (gap < 0 || gap > MAX_GAP_MS) break;
       end++;
     }
-    cluster = cluster.slice(start, end + 1);
 
     const parts = [];
-    for (const id of cluster) {
-      const text = textById.get(id);
+    for (const id of cluster.slice(start, end + 1)) {
+      const text = harvestedXTexts.get(id);
       if (text) parts.push(text);
     }
     return parts;
   }
 
   /**
-   * X virtualizes the conversation: only a few posts are in the DOM until the
-   * user scrolls. Nudge the timeline so more of the self-thread mounts (and more
-   * payload lands in the HTML) before we collect text.
+   * @param {string} handle
+   * @param {string} statusId
+   * @returns {string[]}
+   */
+  function assembleXThread(handle, statusId) {
+    harvestVisibleXAuthorPosts(handle);
+    const numberedItems = harvestXEmbedTexts(handle);
+    for (const text of harvestedXTexts.values()) {
+      const marker = parseThreadMarker(text);
+      if (marker) {
+        numberedItems.push({ n: marker.n, total: marker.total, text });
+      }
+    }
+    const numbered = assembleNumberedThread(numberedItems);
+    if (numbered.length > 1) return numbered;
+    return assembleUnnumberedFromHarvest(statusId);
+  }
+
+  /**
+   * X virtualizes the conversation: only a few posts stay mounted. Scroll the
+   * timeline and copy each same-author card into harvestedXTexts as it appears
+   * so unmounting does not drop earlier posts. Stop when the harvest size
+   * (monotonic) stops growing — not when the current viewport stops growing.
    */
   async function loadFullXThread() {
     if (!isXPost()) return;
-    if (!location.pathname.match(/\/[^/]+\/status\/\d+/)) return;
+    const path = location.pathname.match(/^\/([^/]+)\/status\/\d+/);
+    if (!path) return;
+    const handle = path[1];
 
-    const sleepMs = 400;
-    const maxPasses = 60;
+    const sleepMs = 350;
+    const maxPasses = 80;
     const y0 = window.scrollY;
     const column =
       document.querySelector('[data-testid="primaryColumn"]') ||
       document.scrollingElement ||
       document.documentElement;
 
-    /** Unique author status IDs currently mounted (better than article count). */
-    const authorStatusCount = () => {
-      const path = location.pathname.match(/^\/([^/]+)\/status\//);
-      const handle = path?.[1] || "";
-      const handleLc = handle.toLowerCase();
-      const ids = new Set();
-      for (const article of topLevelXArticles()) {
-        const author = authorHandleFromXArticle(article);
-        const hit = handle
-          ? article.querySelector(
-              `a[href*="/${handle}/status/"], a[href*="/${handleLc}/status/"]`
-            )
-          : null;
-        const isAuthor =
-          (author && handle && author.toLowerCase() === handleLc) || Boolean(hit);
-        if (!isAuthor && handle) continue;
-        const sid = statusIdFromXArticle(article);
-        if (sid) ids.add(sid);
+    const scrollByPx = (dy) => {
+      window.scrollBy(0, dy);
+      try {
+        if (typeof column.scrollBy === "function") column.scrollBy(0, dy);
+        else column.scrollTop = (column.scrollTop || 0) + dy;
+      } catch {
+        // ignore
       }
-      // Also count path links in the live HTML for this author (payload grows too).
-      if (handle) {
-        const html = document.documentElement?.innerHTML || "";
-        const re = new RegExp(
-          `/${handle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}/status/(\\d+)`,
-          "gi"
-        );
-        let m;
-        while ((m = re.exec(html))) ids.add(m[1]);
-      }
-      return ids.size;
     };
 
-    // Start at top so early thread posts are included.
+    // Start at top so ancestor thread posts mount first.
     window.scrollTo(0, 0);
     try {
       column.scrollTop = 0;
@@ -576,35 +565,29 @@ export async function extractPageData() {
       // ignore
     }
     await sleep(sleepMs);
+    expandVisibleXConversation();
+    harvestVisibleXAuthorPosts(handle);
+    harvestXEmbedTexts(handle);
 
-    let prev = authorStatusCount();
+    let prev = harvestedXTexts.size;
     let stable = 0;
-    let best = prev;
 
     for (let i = 0; i < maxPasses; i++) {
-      const step = Math.max(600, Math.floor(window.innerHeight * 0.85));
-      window.scrollBy(0, step);
-      try {
-        if (typeof column.scrollBy === "function") column.scrollBy(0, step);
-        else column.scrollTop = (column.scrollTop || 0) + step;
-      } catch {
-        // ignore
-      }
+      const step = Math.max(500, Math.floor(window.innerHeight * 0.8));
+      scrollByPx(step);
       await sleep(sleepMs);
-
-      const next = authorStatusCount();
-      if (next > best) best = next;
+      expandVisibleXConversation();
+      harvestVisibleXAuthorPosts(handle);
+      harvestXEmbedTexts(handle);
+      const next = harvestedXTexts.size;
       if (next <= prev) stable++;
       else stable = 0;
       prev = next;
-
-      // Stop when we stop discovering more of the author's status IDs.
-      if (stable >= 8 && best >= 2) break;
+      if (stable >= 6 && next >= 1) break;
     }
 
-    // Restore viewport so clipping doesn't leave the user at the bottom.
     window.scrollTo(0, y0);
-    await sleep(120);
+    await sleep(80);
   }
 
   /**
@@ -616,16 +599,7 @@ export async function extractPageData() {
 
     const path = location.pathname.match(/^\/([^/]+)\/status\/(\d+)/);
     if (path) {
-      const handle = path[1];
-      const statusId = path[2];
-      const fromDom = collectXThreadFromDom(handle, statusId);
-      const fromEmbed = collectXThreadFromEmbed(handle, statusId);
-      const parts =
-        threadScore(fromEmbed) > threadScore(fromDom)
-          ? fromEmbed
-          : fromDom.length > 0
-            ? fromDom
-            : fromEmbed;
+      const parts = assembleXThread(path[1], path[2]);
       if (parts.length > 1) return parts.join("\n\n");
       if (parts.length === 1) return parts[0];
     }

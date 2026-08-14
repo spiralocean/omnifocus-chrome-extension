@@ -18,7 +18,7 @@ and this project uses [Semantic Versioning](https://semver.org/).
 - **Line breaks in clipped notes** — excerpt cleanup no longer flattens all whitespace into a single line (multi-line X posts, YouTube descriptions, and article paragraphs keep their carriage returns). On X/Twitter, prefer the live tweet text over meta tags, which drop newlines.
 - **Shallow clips (e.g. Quora)** — prefer live article/answer text over short meta teasers; fill the note budget with more than three paragraphs; Quora uses answer-body selectors (`.q-text` / answer containers) and JSON-LD when present.
 - **Long X posts cut off** — note/excerpt budget raised from 1200 → 8000 characters; note composition always keeps the source URL and only trims the body; X extraction also reads long-form article bodies when present.
-- **X self-threads** — on a status URL, clip the full author thread into one note: numbered posts (`1/8`…`N/N`) and unnumbered multi-post threads (e.g. “Truth 1…Truth 18” without markers). Scrolls the conversation to load more posts, then gathers live DOM cards plus every nearby embedded `full_text` (not only the few status links currently on screen).
+- **X self-threads** — on a status URL, clip the full author thread into one note: numbered posts (`1/8`…`N/N`) and unnumbered multi-post threads (e.g. “Truth 1…Truth 18” without markers). Scrolls the conversation and copies each same-author post as it mounts (X virtualizes the timeline, so collecting only at the end kept ~5 posts). Also reads embedded `full_text` for the author’s `/handle/status/` IDs.
 
 ## [1.0.0] — 2026-07
 

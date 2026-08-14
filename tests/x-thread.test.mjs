@@ -48,7 +48,7 @@ function assembleNumberedThread(items) {
     .filter(Boolean);
 }
 
-/** Mirror collectXThreadFromEmbed's full_text / long-string scrape. */
+/** Mirror harvestXEmbedTexts numbered full_text / long-string scrape. */
 function extractNumberedFromHtml(html) {
   /** @type {{ n: number, total: number, text: string }[]} */
   const items = [];
@@ -134,9 +134,9 @@ test("Outdoctrination sample HTML yields a multi-part thread when available", ()
 });
 
 /**
- * Unnumbered self-thread: full_text map + all nearby IDs (path ∪ payload),
- * mirrors collectXThreadFromEmbed's unnumbered path after the "only path links"
- * fix.
+ * Unnumbered self-thread: author /handle/status/ IDs only + rest_id→full_text.
+ * Mirrors harvestXEmbedTexts + assembleUnnumberedFromHarvest (no "every tweet
+ * in the 2h window" — that pulled in replies and ads).
  */
 function extractUnnumberedFromHtml(html, handle, statusId) {
   function snowflakeMs(idStr) {
@@ -151,7 +151,7 @@ function extractUnnumberedFromHtml(html, handle, statusId) {
   }
 
   /** @type {Map<string, string>} */
-  const textById = new Map();
+  const rawById = new Map();
   const restRe = /rest_id:"(\d+)"/g;
   let m;
   while ((m = restRe.exec(html))) {
@@ -161,25 +161,27 @@ function extractUnnumberedFromHtml(html, handle, statusId) {
     if (!ft) continue;
     const text = decode(ft[1]).trim();
     if (!text) continue;
-    const prev = textById.get(sid);
-    if (!prev || text.length > prev.length) textById.set(sid, text);
+    const prev = rawById.get(sid);
+    if (!prev || text.length > prev.length) rawById.set(sid, text);
+  }
+
+  /** @type {Map<string, string>} */
+  const harvested = new Map();
+  const escaped = handle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const pathRe = new RegExp(`/${escaped}/status/(\\d+)`, "gi");
+  while ((m = pathRe.exec(html))) {
+    const text = rawById.get(m[1]);
+    if (text) harvested.set(m[1], text);
   }
 
   const rootMs = snowflakeMs(statusId);
   const WINDOW_MS = 2 * 60 * 60 * 1000;
   const MAX_GAP_MS = 15 * 60 * 1000;
-  /** @type {Set<string>} */
-  const candidateIds = new Set([statusId]);
-  const escaped = handle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const pathRe = new RegExp(`/${escaped}/status/(\\d+)`, "gi");
-  while ((m = pathRe.exec(html))) candidateIds.add(m[1]);
-  for (const id of textById.keys()) {
-    if (!rootMs || Math.abs(snowflakeMs(id) - rootMs) <= WINDOW_MS) {
-      candidateIds.add(id);
-    }
-  }
+  /** @type {string[]} */
+  let cluster = [...harvested.keys()];
+  if (statusId && !harvested.has(statusId)) cluster.push(statusId);
 
-  let cluster = [...candidateIds].sort((a, b) => {
+  cluster.sort((a, b) => {
     const d = snowflakeMs(a) - snowflakeMs(b);
     if (d !== 0) return d;
     return a < b ? -1 : a > b ? 1 : 0;
@@ -207,11 +209,35 @@ function extractUnnumberedFromHtml(html, handle, statusId) {
   }
   cluster = cluster.slice(start, end + 1);
 
-  return cluster.map((id) => textById.get(id)).filter(Boolean);
+  return cluster.map((id) => harvested.get(id)).filter(Boolean);
+}
+
+/**
+ * Live X only keeps a sliding window of articles mounted. Harvest must copy
+ * each card as it appears; collecting only at the end keeps the last window.
+ */
+function harvestSlidingWindow(posts, windowSize) {
+  /** @type {Map<string, string>} */
+  const harvested = new Map();
+  /** @type {string[][]} */
+  const snapshots = [];
+  for (let i = 0; i < posts.length; i++) {
+    const view = posts.slice(i, i + windowSize);
+    if (view.length === 0) break;
+    snapshots.push(view.map((p) => p.text));
+    for (const p of view) harvested.set(p.id, p.text);
+    if (i + windowSize >= posts.length) break;
+  }
+  return {
+    endOnly: snapshots.at(-1) || [],
+    harvested: [...harvested.values()],
+  };
 }
 
 test("guideforman unnumbered thread (no 1/N markers) extracts many parts", () => {
-  const fixture = "/tmp/x-thread2.html";
+  const fixture = existsSync("/tmp/x-thread-live.html")
+    ? "/tmp/x-thread-live.html"
+    : "/tmp/x-thread2.html";
   if (!existsSync(fixture)) return;
 
   const html = readFileSync(fixture, "utf8");
@@ -224,11 +250,25 @@ test("guideforman unnumbered thread (no 1/N markers) extracts many parts", () =>
     "2086030980280619218"
   );
   assert.ok(
-    parts.length >= 10,
+    parts.length >= 30,
     `expected long unnumbered thread, got ${parts.length}`
   );
   assert.ok(parts[0].includes("HOW TO READ ANYONE") || parts[0].includes("Truth"));
   const joined = parts.join("\n\n");
   assert.ok(joined.includes("Truth 1"));
-  assert.ok(joined.includes("Truth 18") || joined.includes("Truth 10"));
+  assert.ok(joined.includes("Truth 18"));
+  assert.ok(joined.includes("Real Lesson"));
+});
+
+test("virtualized conversation: harvest-while-scrolling keeps all posts", () => {
+  const posts = Array.from({ length: 39 }, (_, i) => ({
+    id: String(2086030980280619218n + BigInt(i)),
+    text: i === 0 ? "HOW TO READ ANYONE INSTANTLY" : `Truth ${i}`,
+  }));
+  const { endOnly, harvested } = harvestSlidingWindow(posts, 5);
+  assert.equal(endOnly.length, 5, "end-of-scroll DOM only has the last window");
+  assert.ok(!endOnly[0].includes("HOW TO READ ANYONE"));
+  assert.equal(harvested.length, 39);
+  assert.ok(harvested[0].includes("HOW TO READ ANYONE"));
+  assert.equal(harvested[38], "Truth 38");
 });

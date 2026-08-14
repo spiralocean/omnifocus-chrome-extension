@@ -1,6 +1,6 @@
 # WIP — post-1.0.0 unreleased work
 
-**Last updated:** 2026-08-11 (progress committed; still unreleased)  
+**Last updated:** 2026-08-13 (X harvest-while-scroll; still unreleased)  
 **Branch:** `main` (local commit of post-1.0.0 work; not yet version-bumped / store-shipped)  
 **Shipped version:** `1.0.0` (Chrome Web Store + Mac App Store)  
 **Repo:** `/Users/stephenzinn/omnifocus-chrome-extension`  
@@ -39,10 +39,9 @@ Use this file + `CHANGELOG.md` to resume after a disconnect. Prefer this over ch
 6. **X self-threads**  
    - Status URLs collect the full same-author thread into one note.  
    - Numbered: `(1/8)`…`(8/8)` / `(🧵1/8)`, sorted by n.  
-   - Unnumbered: cluster **all** `rest_id→full_text` near opened snowflake (not only `/handle/status/` path links — live X often only has ~5 path links until scroll).  
-   - **Scroll-load**: on status URLs, `extractPageData` is async and scrolls the conversation to mount more of the self-thread before collect (user reported 5/15 without this).  
-   - DOM path: contiguous same-author cards both directions. Prefer richer of DOM vs embed (`threadScore`).  
-   - Fixtures: Outdoctrination numbered; guideforman unnumbered ~39 posts.  
+   - Unnumbered: cluster harvested author IDs by snowflake time.  
+   - **Harvest-while-scrolling** (2026-08-13): live X virtualizes the conversation — only ~5 cards stay mounted, and `innerHTML` path-link counts plateau at the viewport, so the old “scroll then collect” pass stopped early and dropped the rest of the thread (guideforman 39-post “Truth 1…18”). Now each same-author card is copied into a map as it appears; stop when that map stops growing. Also click “Show more replies” / tweet “Show more” in the primary column (never `<a href>` “Show this thread”). Embed scrape only keeps `/handle/status/` IDs for this author (not every `rest_id` in a 2h window).  
+   - Fixtures: Outdoctrination numbered; guideforman unnumbered 39 posts / all 18 truths.  
    - Tests: `tests/x-thread.test.mjs`
 
 ---
@@ -76,7 +75,7 @@ Use this file + `CHANGELOG.md` to resume after a disconnect. Prefer this over ch
 - [ ] Push to origin / store submit
 - [ ] User should reload Brave extension to pick up latest code
 - [ ] First notification-click may prompt macOS Automation (host/Python controlling OmniFocus)
-- [ ] Verify X long threads still get all parts after scroll-load (user reported 5/15 before that fix)
+- [ ] Reload Brave unpacked extension, re-clip https://x.com/guideforman/status/2086030980280619218 — note should include Truth 1 through Truth 18 + “The Real Lesson”
 
 ---
 
@@ -96,6 +95,6 @@ node --test tests/*.mjs
 ## Resume checklist for next agent
 
 1. Read this file + `CHANGELOG.md`  
-2. `git status` / `git diff` — all Unreleased work is still uncommitted  
+2. `git status` / `git log` — post-1.0.0 + harvest-while-scroll are local (`ahead` of origin); still unreleased  
 3. Search mempalace wing `omnifocus-chrome-extension` room `progress` / `features`  
 4. Keep this file updated whenever behavior changes  

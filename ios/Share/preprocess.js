@@ -204,68 +204,6 @@ function extractPageData() {
     return out;
   }
 
-  function collectXThreadFromDom(handle, statusId) {
-    var handleLc = handle.toLowerCase();
-    var articles = topLevelXArticles();
-    var cards = [];
-    for (var i = 0; i < articles.length; i++) {
-      var article = articles[i];
-      var author = authorHandleFromXArticle(article);
-      var authorStatus = article.querySelector(
-        'a[href*="/' + handle + '/status/"], a[href*="/' + handleLc + '/status/"]'
-      );
-      var isAuthor =
-        (author && author.toLowerCase() === handleLc) || Boolean(authorStatus);
-      var sid = statusIdFromXArticle(article);
-      var text = textFromXArticle(article);
-      if (!text) continue;
-      cards.push({
-        statusId: sid,
-        text: text,
-        isAuthor: isAuthor,
-        marker: parseThreadMarker(text),
-      });
-    }
-    var numbered = [];
-    for (var n = 0; n < cards.length; n++) {
-      if (cards[n].isAuthor && cards[n].marker) {
-        numbered.push({
-          n: cards[n].marker.n,
-          total: cards[n].marker.total,
-          text: cards[n].text,
-        });
-      }
-    }
-    var assembled = assembleNumberedThread(numbered);
-    if (assembled.length > 1) return assembled;
-    if (!cards.length) return [];
-    var rootIdx = -1;
-    for (var s = 0; s < cards.length; s++) {
-      if (cards[s].statusId === statusId) {
-        rootIdx = s;
-        break;
-      }
-    }
-    if (rootIdx < 0) {
-      for (var r = 0; r < cards.length; r++) {
-        if (cards[r].isAuthor) {
-          rootIdx = r;
-          break;
-        }
-      }
-    }
-    if (rootIdx < 0) return [];
-    var start = rootIdx;
-    while (start > 0 && cards[start - 1].isAuthor) start--;
-    var end = rootIdx;
-    while (end < cards.length - 1 && cards[end + 1].isAuthor) end++;
-    var slice = [];
-    for (var c = start; c <= end; c++) {
-      if (cards[c].isAuthor) slice.push(cards[c].text);
-    }
-    return slice;
-  }
-
   function snowflakeMs(idStr) {
     try {
       return Number(BigInt(idStr) >> 22n) + 1288834974657;
@@ -282,55 +220,84 @@ function extractPageData() {
     }
   }
 
-  function threadScore(parts) {
-    if (!parts || !parts.length) return 0;
-    var chars = 0;
-    for (var i = 0; i < parts.length; i++) chars += parts[i].length;
-    return parts.length * 1000000 + chars;
+  function rememberXText(map, id, text) {
+    if (!id || !text) return;
+    if (!map[id] || text.length > map[id].length) map[id] = text;
   }
 
-  function collectXThreadFromEmbed(handle, statusId) {
-    var html =
-      (document.documentElement && document.documentElement.innerHTML) || "";
-    if (!html || html.length < 1000) return [];
+  function isAuthorXArticle(article, handle) {
+    var handleLc = handle.toLowerCase();
+    var author = authorHandleFromXArticle(article);
+    if (author && author.toLowerCase() === handleLc) return true;
+    return Boolean(
+      article.querySelector(
+        'a[href*="/' + handle + '/status/"], a[href*="/' + handleLc + '/status/"]'
+      )
+    );
+  }
+
+  function assembleXThread(handle, statusId) {
+    var harvested = {};
     var numberedItems = [];
-    var textById = {};
-
-    function considerNumbered(text) {
-      var trimmed = (text || "").trim();
-      if (!trimmed) return;
-      var m =
-        trimmed.match(/\((?:🧵\s*)?(\d+)\s*\/\s*(\d+)\)\s*$/) ||
-        trimmed.match(
-          /\((?:🧵\s*)?(\d+)\s*\/\s*(\d+)\)\s+https?:\/\/t\.co\/\w+\s*$/
-        );
-      if (!m) return;
-      var n = Number(m[1]);
-      var total = Number(m[2]);
-      if (!isFinite(n) || !isFinite(total) || total < 2) return;
-      numberedItems.push({ n: n, total: total, text: trimmed });
-    }
-
-    var restRe = /rest_id:"(\d+)"/g;
-    var m;
-    while ((m = restRe.exec(html))) {
-      var sid = m[1];
-      var chunk = html.slice(m.index, m.index + 8000);
-      var ft = chunk.match(/full_text:"((?:[^"\\]|\\.)*)"/);
-      if (!ft) continue;
-      var text = decodeXFullText(ft[1]).trim();
-      if (!text) continue;
-      considerNumbered(text);
-      if (!textById[sid] || text.length > textById[sid].length) {
-        textById[sid] = text;
+    var articles = topLevelXArticles();
+    for (var i = 0; i < articles.length; i++) {
+      if (!isAuthorXArticle(articles[i], handle)) continue;
+      var sid = statusIdFromXArticle(articles[i]);
+      var body = textFromXArticle(articles[i]);
+      if (sid && body) rememberXText(harvested, sid, body);
+      var marker = parseThreadMarker(body);
+      if (marker && body) {
+        numberedItems.push({ n: marker.n, total: marker.total, text: body });
       }
     }
 
-    var fullTextRe = /full_text:"((?:[^"\\]|\\.)*)"/g;
-    while ((m = fullTextRe.exec(html))) considerNumbered(decodeXFullText(m[1]));
-    var longRe =
-      /"((?:[^"\\]|\\.){40,}?\((?:🧵\s*)?\d+\s*\/\s*\d+\)(?:\s+https?:\\\/\\\/t\.co\\\/\w+)?)"/g;
-    while ((m = longRe.exec(html))) considerNumbered(decodeXFullText(m[1]));
+    var html =
+      (document.documentElement && document.documentElement.innerHTML) || "";
+    var rawById = {};
+    if (html && html.length >= 1000) {
+      function considerNumbered(text) {
+        var trimmed = (text || "").trim();
+        if (!trimmed) return;
+        var mm =
+          trimmed.match(/\((?:🧵\s*)?(\d+)\s*\/\s*(\d+)\)\s*$/) ||
+          trimmed.match(
+            /\((?:🧵\s*)?(\d+)\s*\/\s*(\d+)\)\s+https?:\/\/t\.co\/\w+\s*$/
+          );
+        if (!mm) return;
+        var nn = Number(mm[1]);
+        var tot = Number(mm[2]);
+        if (!isFinite(nn) || !isFinite(tot) || tot < 2) return;
+        numberedItems.push({ n: nn, total: tot, text: trimmed });
+      }
+
+      var restRe = /rest_id:"(\d+)"/g;
+      var m;
+      while ((m = restRe.exec(html))) {
+        var chunk = html.slice(m.index, m.index + 8000);
+        var ft = chunk.match(/full_text:"((?:[^"\\]|\\.)*)"/);
+        if (!ft) continue;
+        var text = decodeXFullText(ft[1]).trim();
+        if (!text) continue;
+        considerNumbered(text);
+        if (!rawById[m[1]] || text.length > rawById[m[1]].length) {
+          rawById[m[1]] = text;
+        }
+      }
+      var fullTextRe = /full_text:"((?:[^"\\]|\\.)*)"/g;
+      while ((m = fullTextRe.exec(html))) considerNumbered(decodeXFullText(m[1]));
+      var longRe =
+        /"((?:[^"\\]|\\.){40,}?\((?:🧵\s*)?\d+\s*\/\s*\d+\)(?:\s+https?:\\\/\\\/t\.co\\\/\w+)?)"/g;
+      while ((m = longRe.exec(html))) considerNumbered(decodeXFullText(m[1]));
+
+      var escaped = handle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      var pathRe = new RegExp("/" + escaped + "/status/(\\d+)", "gi");
+      while ((m = pathRe.exec(html))) {
+        if (rawById[m[1]]) rememberXText(harvested, m[1], rawById[m[1]]);
+      }
+      for (var hid in harvested) {
+        if (rawById[hid]) rememberXText(harvested, hid, rawById[hid]);
+      }
+    }
 
     var numbered = assembleNumberedThread(numberedItems);
     if (numbered.length > 1) return numbered;
@@ -338,29 +305,13 @@ function extractPageData() {
     var rootMs = snowflakeMs(statusId);
     var WINDOW_MS = 2 * 60 * 60 * 1000;
     var MAX_GAP_MS = 15 * 60 * 1000;
-    var candidateIds = {};
-    if (statusId) candidateIds[statusId] = 1;
-    var escaped = handle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    var pathRe = new RegExp("/" + escaped + "/status/(\\d+)", "gi");
-    while ((m = pathRe.exec(html))) candidateIds[m[1]] = 1;
-    var tweetRe = /tweet-(\d{15,})/g;
-    while ((m = tweetRe.exec(html))) {
-      if (textById[m[1]]) candidateIds[m[1]] = 1;
-    }
-    for (var tid in textById) {
-      if (!Object.prototype.hasOwnProperty.call(textById, tid)) continue;
-      if (!rootMs || Math.abs(snowflakeMs(tid) - rootMs) <= WINDOW_MS) {
-        candidateIds[tid] = 1;
-      }
-    }
-    var cluster = Object.keys(candidateIds).sort(function (a, b) {
+    var cluster = Object.keys(harvested);
+    if (statusId && !harvested[statusId]) cluster.push(statusId);
+    cluster.sort(function (a, b) {
       var d = snowflakeMs(a) - snowflakeMs(b);
       if (d !== 0) return d;
       return a < b ? -1 : a > b ? 1 : 0;
     });
-    if (!cluster.length) {
-      return textById[statusId] ? [textById[statusId]] : [];
-    }
     if (rootMs) {
       var inWindow = [];
       for (var w = 0; w < cluster.length; w++) {
@@ -370,7 +321,6 @@ function extractPageData() {
       }
       if (inWindow.length) cluster = inWindow;
     }
-
     var rootIdx = cluster.indexOf(statusId);
     if (rootIdx < 0) rootIdx = 0;
     var start = rootIdx;
@@ -385,11 +335,9 @@ function extractPageData() {
       if (gap2 < 0 || gap2 > MAX_GAP_MS) break;
       end++;
     }
-    cluster = cluster.slice(start, end + 1);
-
     var parts = [];
-    for (var p = 0; p < cluster.length; p++) {
-      if (textById[cluster[p]]) parts.push(textById[cluster[p]]);
+    for (var p = start; p <= end; p++) {
+      if (harvested[cluster[p]]) parts.push(harvested[cluster[p]]);
     }
     return parts;
   }
@@ -399,16 +347,7 @@ function extractPageData() {
 
     var path = location.pathname.match(/^\/([^/]+)\/status\/(\d+)/);
     if (path) {
-      var handle = path[1];
-      var statusId = path[2];
-      var fromDom = collectXThreadFromDom(handle, statusId);
-      var fromEmbed = collectXThreadFromEmbed(handle, statusId);
-      var parts =
-        threadScore(fromEmbed) > threadScore(fromDom)
-          ? fromEmbed
-          : fromDom.length > 0
-            ? fromDom
-            : fromEmbed;
+      var parts = assembleXThread(path[1], path[2]);
       if (parts.length > 1) return parts.join("\n\n");
       if (parts.length === 1) return parts[0];
     }
