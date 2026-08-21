@@ -144,6 +144,195 @@ export async function extractPageData() {
   }
 
   /**
+   * X renders t.co as CSS-truncated text (`memory.th…`). `.th` is a TLD, so
+   * OmniFocus/Krank linkify that fragment into http://memory.th. Photo tweets
+   * also append a media t.co that redirects to /status/…/photo/1.
+   *
+   * Keep @mentions / #hashtags as visible text; replace URL anchors with the
+   * real destination (or drop media/unknown t.co). Mirrored in tests/x-links.test.mjs.
+   */
+  /** @type {{ expand: Map<string, string>, display: Map<string, string> }} */
+  let xUrlMaps = { expand: new Map(), display: new Map() };
+
+  /** @param {string} raw */
+  function isXMediaUrl(raw) {
+    try {
+      const parsed = new URL(raw);
+      const host = parsed.hostname.replace(/^www\./, "").toLowerCase();
+      if (
+        host === "t.co" ||
+        host === "pic.twitter.com" ||
+        host === "pic.x.com" ||
+        host === "pbs.twimg.com" ||
+        host === "video.twimg.com" ||
+        host.endsWith(".twimg.com")
+      ) {
+        return true;
+      }
+      if (
+        host === "x.com" ||
+        host === "twitter.com" ||
+        host === "mobile.x.com" ||
+        host === "mobile.twitter.com"
+      ) {
+        return /\/status\/\d+\/(photo|video|analytics)(\/|$)/.test(parsed.pathname);
+      }
+      return false;
+    } catch {
+      return false;
+    }
+  }
+
+  /** @param {string} raw */
+  function decodeXUrl(raw) {
+    try {
+      return JSON.parse(`"${raw}"`);
+    } catch {
+      return String(raw || "").replace(/\\\//g, "/");
+    }
+  }
+
+  /** @param {string} html */
+  function collectXUrlMaps(html) {
+    /** @type {Map<string, string>} */
+    const expand = new Map();
+    /** @type {Map<string, string>} */
+    const display = new Map();
+    if (!html) return { expand, display };
+
+    const expRe = /expanded_url"?:?"([^"]*)"/g;
+    let m;
+    while ((m = expRe.exec(html))) {
+      const expanded = decodeXUrl(m[1]);
+      if (!/^https?:\/\//i.test(expanded) || isXMediaUrl(expanded)) continue;
+
+      const start = Math.max(0, m.index - 600);
+      const chunk = html.slice(start, m.index + m[0].length + 600);
+      const tcoMatches = [...chunk.matchAll(/https:\/\/t\.co\/[A-Za-z0-9]+/g)];
+      if (tcoMatches.length > 0) {
+        const expPos = m.index - start;
+        let best = tcoMatches[0];
+        let bestDist = Math.abs((best.index || 0) - expPos);
+        for (const tm of tcoMatches) {
+          const d = Math.abs((tm.index || 0) - expPos);
+          if (d < bestDist) {
+            best = tm;
+            bestDist = d;
+          }
+        }
+        const short = best[0];
+        const prev = expand.get(short);
+        if (!prev || expanded.length > prev.length) expand.set(short, expanded);
+      }
+
+      const disp = chunk.match(/display_url"?:?"([^"]*)"/);
+      if (disp) {
+        const shown = decodeXUrl(disp[1])
+          .replace(/…$/, "")
+          .replace(/\.{3}$/, "");
+        if (shown.length >= 6 && !isXMediaUrl(`https://${shown}`)) {
+          display.set(shown, expanded);
+        }
+      }
+    }
+    return { expand, display };
+  }
+
+  function refreshXUrlMaps() {
+    xUrlMaps = collectXUrlMaps(document.documentElement?.innerHTML || "");
+  }
+
+  /**
+   * @param {string} text
+   * @param {{ expand?: Map<string, string>, display?: Map<string, string> }} [maps]
+   */
+  function rewriteXPostLinks(text, maps = xUrlMaps) {
+    if (!text) return text;
+    let out = String(text);
+    const expand = maps?.expand || new Map();
+    const display = maps?.display || new Map();
+
+    for (const [shown, long] of display) {
+      const escaped = shown.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      out = out.replace(
+        new RegExp(`(?:https?:\\/\\/)?${escaped}(?:…|\\.{3})?`, "g"),
+        long
+      );
+    }
+    for (const [short, long] of expand) {
+      out = out.split(short).join(long);
+    }
+
+    out = out.replace(/https?:\/\/t\.co\/[A-Za-z0-9]+/g, "");
+    out = out.replace(/https?:\/\/pic\.(?:twitter|x)\.com\/[A-Za-z0-9]+/g, "");
+    out = out.replace(
+      /https?:\/\/(?:www\.)?(?:x|twitter)\.com\/[^/\s]+\/status\/\d+\/(?:photo|video|analytics)(?:\/\d+)?/gi,
+      ""
+    );
+    out = out.replace(
+      /(?:https?:\/\/)?(?:www\.)?[A-Za-z0-9][A-Za-z0-9.-]*\.[A-Za-z]{2,}[^\s]*?(?:…|\.{3})/g,
+      ""
+    );
+
+    out = out.replace(/[ \t]+\n/g, "\n").replace(/[ \t]{2,}/g, " ");
+    out = out.replace(/[ \t]+([.,;:!?])/g, "$1");
+    return out.trim();
+  }
+
+  /** Mentions / hashtags / cashtags — keep the visible @/#/$ text. */
+  function isXChromeLink(href) {
+    try {
+      const path = new URL(href, location.href).pathname;
+      if (/^\/[A-Za-z0-9_]+\/?$/.test(path)) return true;
+      if (path.startsWith("/hashtag/")) return true;
+      if (path.startsWith("/search")) return true;
+      if (path.includes("cashtag")) return true;
+      return false;
+    } catch {
+      return false;
+    }
+  }
+
+  /** @param {Element} a */
+  function resolvedXLinkText(a) {
+    const href = a.getAttribute("href") || "";
+    const visible = (a.innerText || a.textContent || "").trim();
+    if (!href) return visible;
+    if (isXChromeLink(href)) return visible;
+
+    const dataExp = a.getAttribute("data-expanded-url") || "";
+    const titleAttr = a.getAttribute("title") || "";
+    let abs = href;
+    try {
+      abs = new URL(href, location.href).href;
+    } catch {
+      // keep href
+    }
+    for (const cand of [dataExp, titleAttr, abs]) {
+      if (/^https?:\/\//i.test(cand)) return cand;
+    }
+    return visible;
+  }
+
+  /**
+   * innerText of a tweet includes CSS-truncated link labels. Swap URL <a>s for
+   * href/expanded before reading so we never store `memory.th…`.
+   * @param {Element | null} el
+   */
+  function serializeXRichText(el) {
+    if (!el) return "";
+    const links = el.querySelectorAll("a[href]");
+    if (links.length === 0) return (el.innerText || "").trim();
+    const clone = el.cloneNode(true);
+    if (!(clone instanceof Element)) return (el.innerText || "").trim();
+    for (const a of clone.querySelectorAll("a[href]")) {
+      const label = resolvedXLinkText(a);
+      a.replaceWith(document.createTextNode(label));
+    }
+    return (clone.innerText || "").trim();
+  }
+
+  /**
    * Main post body from an X status article. Prefer long-form / article bodies
    * when present; otherwise tweetText (innerText keeps line breaks). Skip
    * nested quote-tweet articles so we don't clip the wrong text.
@@ -155,7 +344,7 @@ export async function extractPageData() {
       article.querySelector('[data-testid="twitterArticleRichTextView"]') ||
       article.querySelector('[data-testid="article-detail"]') ||
       article.querySelector('div[data-testid="card.layoutLarge.detail"]');
-    const longText = longForm?.innerText?.trim() || "";
+    const longText = serializeXRichText(longForm);
     if (longText.length > 80) return longText;
 
     // Primary tweet text only — not quote-tweet text nested in a child article.
@@ -165,7 +354,7 @@ export async function extractPageData() {
     if (mainTextEls.length === 0) return "";
     // Concatenate in DOM order (some clients split blocks across nodes).
     return mainTextEls
-      .map((el) => el.innerText?.trim() || "")
+      .map((el) => serializeXRichText(el))
       .filter(Boolean)
       .join("\n\n");
   }
@@ -384,6 +573,7 @@ export async function extractPageData() {
    */
   function harvestXEmbedTexts(handle) {
     const html = document.documentElement?.innerHTML || "";
+    refreshXUrlMaps();
     /** @type {{ n: number, total: number, text: string }[]} */
     const numberedItems = [];
     if (!html || html.length < 1000) return numberedItems;
@@ -514,6 +704,7 @@ export async function extractPageData() {
    * @returns {string[]}
    */
   function assembleXThread(handle, statusId) {
+    refreshXUrlMaps();
     harvestVisibleXAuthorPosts(handle);
     const numberedItems = harvestXEmbedTexts(handle);
     for (const text of harvestedXTexts.values()) {
@@ -522,9 +713,13 @@ export async function extractPageData() {
         numberedItems.push({ n: marker.n, total: marker.total, text });
       }
     }
-    const numbered = assembleNumberedThread(numberedItems);
+    const numbered = assembleNumberedThread(numberedItems)
+      .map((t) => rewriteXPostLinks(t))
+      .filter(Boolean);
     if (numbered.length > 1) return numbered;
-    return assembleUnnumberedFromHarvest(statusId);
+    return assembleUnnumberedFromHarvest(statusId)
+      .map((t) => rewriteXPostLinks(t))
+      .filter(Boolean);
   }
 
   /**
@@ -588,6 +783,7 @@ export async function extractPageData() {
 
     window.scrollTo(0, y0);
     await sleep(80);
+    refreshXUrlMaps();
   }
 
   /**
@@ -596,22 +792,23 @@ export async function extractPageData() {
    */
   function xPostText() {
     if (!isXPost()) return "";
+    refreshXUrlMaps();
 
     const path = location.pathname.match(/^\/([^/]+)\/status\/(\d+)/);
     if (path) {
       const parts = assembleXThread(path[1], path[2]);
-      if (parts.length > 1) return parts.join("\n\n");
-      if (parts.length === 1) return parts[0];
+      if (parts.length > 1) return rewriteXPostLinks(parts.join("\n\n"));
+      if (parts.length === 1) return rewriteXPostLinks(parts[0]);
     }
 
     // Profile / home / timeline: first visible top-level tweet body.
     const firstArticle = topLevelXArticles()[0] || document.querySelector("article");
     if (firstArticle) {
-      const text = textFromXArticle(firstArticle);
+      const text = rewriteXPostLinks(textFromXArticle(firstArticle));
       if (text) return text;
     }
     const first = document.querySelector('[data-testid="tweetText"]');
-    return first?.innerText?.trim() || "";
+    return rewriteXPostLinks(serializeXRichText(first));
   }
 
   // Load the full X conversation before reading DOM / HTML payload.
@@ -722,13 +919,15 @@ export async function extractPageData() {
 
   const ogTitle = document.querySelector('meta[property="og:title"]')?.content;
   const twitterTitle = document.querySelector('meta[name="twitter:title"]')?.content;
-  const title = (
+  let title = (
     youTubeVideoTitle() ||
     ogTitle ||
     twitterTitle ||
     document.title ||
     "Untitled"
   ).trim();
+  // X og:title often embeds a media t.co that Brave/Krank cannot open.
+  if (isXPost()) title = rewriteXPostLinks(title) || title;
 
   const ogSite = document.querySelector('meta[property="og:site_name"]')?.content;
   const siteName = (ogSite || hostname()).trim();
@@ -784,15 +983,15 @@ export async function extractPageData() {
 
   // Prefer live / structured bodies over meta tags. Meta is often a short
   // teaser (Quora, news sites) and used to win over the real article text.
-  const excerpt = normalizeExcerpt(
-    selection ||
-      youTubeDescription() ||
-      xPostText() ||
-      quoraAnswerText() ||
-      jsonLdArticleBody() ||
-      articleExcerpt ||
-      metaDescription
-  ).slice(0, EXCERPT_MAX);
+  const rawExcerpt =
+    (isXPost() && selection ? rewriteXPostLinks(selection) : selection) ||
+    youTubeDescription() ||
+    xPostText() ||
+    quoraAnswerText() ||
+    jsonLdArticleBody() ||
+    articleExcerpt ||
+    metaDescription;
+  const excerpt = normalizeExcerpt(rawExcerpt).slice(0, EXCERPT_MAX);
 
   return {
     title,

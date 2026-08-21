@@ -19,6 +19,7 @@ and this project uses [Semantic Versioning](https://semver.org/).
 - **Shallow clips (e.g. Quora)** — prefer live article/answer text over short meta teasers; fill the note budget with more than three paragraphs; Quora uses answer-body selectors (`.q-text` / answer containers) and JSON-LD when present.
 - **Long X posts cut off** — note/excerpt budget raised from 1200 → 8000 characters; note composition always keeps the source URL and only trims the body; X extraction also reads long-form article bodies when present.
 - **X self-threads** — on a status URL, clip the full author thread into one note: numbered posts (`1/8`…`N/N`) and unnumbered multi-post threads (e.g. “Truth 1…Truth 18” without markers). Scrolls the conversation and copies each same-author post as it mounts (X virtualizes the timeline, so collecting only at the end kept ~5 posts). Also reads embedded `full_text` for the author’s `/handle/status/` IDs.
+- **Dead links on X clips** — tweet bodies and titles no longer keep CSS-truncated URL text (`memory.th…` — `.th` is a real TLD, so OmniFocus/Krank turned it into `http://memory.th`) or media `t.co` wrappers that go to `/photo/1`. Real article `t.co` links expand to the destination; photo/video shorteners are dropped (the status permalink is already the first line of the note).
 
 ## [1.0.0] — 2026-07
 

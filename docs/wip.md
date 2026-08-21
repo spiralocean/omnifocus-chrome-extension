@@ -1,6 +1,6 @@
 # WIP — post-1.0.0 unreleased work
 
-**Last updated:** 2026-08-13 (X harvest-while-scroll; still unreleased)  
+**Last updated:** 2026-08-21 (X clip links: drop truncated `memory.th…` / media t.co; still unreleased)  
 **Branch:** `main` (local commit of post-1.0.0 work; not yet version-bumped / store-shipped)  
 **Shipped version:** `1.0.0` (Chrome Web Store + Mac App Store)  
 **Repo:** `/Users/stephenzinn/omnifocus-chrome-extension`  
@@ -44,6 +44,11 @@ Use this file + `CHANGELOG.md` to resume after a disconnect. Prefer this over ch
    - Fixtures: Outdoctrination numbered; guideforman unnumbered 39 posts / all 18 truths.  
    - Tests: `tests/x-thread.test.mjs`
 
+7. **X clip links that don’t work**  
+   - Bug: X shows t.co as CSS-truncated text (`memory.th…`). `.th` is a TLD, so OmniFocus/Krank linkified it to `http://memory.th`. Photo tweets also put a media `t.co` in `full_text` / `og:title` that redirects to `/status/…/photo/1` (Brave often fails t.co).  
+   - Fix: serialize URL `<a>`s to href/expanded destination (keep @/# as visible text); expand real `t.co` from `expanded_url`; drop remaining t.co, `pic.twitter.com`, and leftover `hostname…` fragments. Same rewrite on X titles.  
+   - Files: `src/extract-page.js`, iOS `preprocess.js`, safari mirror. Tests: `tests/x-links.test.mjs`. Reload unpacked extension.
+
 ---
 
 ## Implementation map
@@ -59,7 +64,7 @@ Use this file + `CHANGELOG.md` to resume after a disconnect. Prefer this over ch
 | Settings default | `src/omnifocus.js` → `notificationStayVisible` |
 | Options UI | `options.html`, `options.js` |
 | Excerpt / X / Quora | `src/extract-page.js`, `ios/Share/preprocess.js` |
-| Tests | `tests/notifications.test.mjs`, `tests/x-thread.test.mjs`, `tests/default-task-name.test.mjs` |
+| Tests | `tests/notifications.test.mjs`, `tests/x-thread.test.mjs`, `tests/x-links.test.mjs`, `tests/default-task-name.test.mjs` |
 | Changelog | `CHANGELOG.md` |
 
 **Mirror rule:** Chrome root sources and `safari/Clip to OmniFocus/Shared (Extension)/Resources/` are hand-kept identical. When editing JS/options, copy both trees.

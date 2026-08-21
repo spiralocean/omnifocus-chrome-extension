@@ -93,20 +93,181 @@ function extractPageData() {
     return host === "quora.com" || /\.quora\.com$/.test(host);
   }
 
+  var xUrlMaps = { expand: {}, display: {} };
+
+  function isXMediaUrl(raw) {
+    try {
+      var parsed = new URL(raw);
+      var host = parsed.hostname.replace(/^www\./, "").toLowerCase();
+      if (
+        host === "t.co" ||
+        host === "pic.twitter.com" ||
+        host === "pic.x.com" ||
+        host === "pbs.twimg.com" ||
+        host === "video.twimg.com" ||
+        /\.twimg\.com$/.test(host)
+      ) {
+        return true;
+      }
+      if (
+        host === "x.com" ||
+        host === "twitter.com" ||
+        host === "mobile.x.com" ||
+        host === "mobile.twitter.com"
+      ) {
+        return /\/status\/\d+\/(photo|video|analytics)(\/|$)/.test(parsed.pathname);
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function decodeXUrl(raw) {
+    try {
+      return JSON.parse('"' + raw + '"');
+    } catch (e) {
+      return String(raw || "").replace(/\\\//g, "/");
+    }
+  }
+
+  function collectXUrlMaps(html) {
+    var expand = {};
+    var display = {};
+    if (!html) return { expand: expand, display: display };
+    var expRe = /expanded_url"?:?"([^"]*)"/g;
+    var m;
+    while ((m = expRe.exec(html))) {
+      var expanded = decodeXUrl(m[1]);
+      if (!/^https?:\/\//i.test(expanded) || isXMediaUrl(expanded)) continue;
+      var start = Math.max(0, m.index - 600);
+      var chunk = html.slice(start, m.index + m[0].length + 600);
+      var tcoRe = /https:\/\/t\.co\/[A-Za-z0-9]+/g;
+      var tcoMatches = [];
+      var tm;
+      while ((tm = tcoRe.exec(chunk))) tcoMatches.push(tm);
+      if (tcoMatches.length > 0) {
+        var expPos = m.index - start;
+        var best = tcoMatches[0];
+        var bestDist = Math.abs(best.index - expPos);
+        for (var i = 1; i < tcoMatches.length; i++) {
+          var d = Math.abs(tcoMatches[i].index - expPos);
+          if (d < bestDist) {
+            best = tcoMatches[i];
+            bestDist = d;
+          }
+        }
+        var short = best[0];
+        if (!expand[short] || expanded.length > expand[short].length) {
+          expand[short] = expanded;
+        }
+      }
+      var disp = chunk.match(/display_url"?:?"([^"]*)"/);
+      if (disp) {
+        var shown = decodeXUrl(disp[1]).replace(/…$/, "").replace(/\.{3}$/, "");
+        if (shown.length >= 6 && !isXMediaUrl("https://" + shown)) {
+          display[shown] = expanded;
+        }
+      }
+    }
+    return { expand: expand, display: display };
+  }
+
+  function refreshXUrlMaps() {
+    xUrlMaps = collectXUrlMaps(
+      (document.documentElement && document.documentElement.innerHTML) || ""
+    );
+  }
+
+  function rewriteXPostLinks(text) {
+    if (!text) return text;
+    var out = String(text);
+    var shown;
+    for (shown in xUrlMaps.display) {
+      if (!Object.prototype.hasOwnProperty.call(xUrlMaps.display, shown)) continue;
+      var escaped = shown.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      out = out.replace(
+        new RegExp("(?:https?:\\/\\/)?" + escaped + "(?:…|\\.{3})?", "g"),
+        xUrlMaps.display[shown]
+      );
+    }
+    for (shown in xUrlMaps.expand) {
+      if (!Object.prototype.hasOwnProperty.call(xUrlMaps.expand, shown)) continue;
+      out = out.split(shown).join(xUrlMaps.expand[shown]);
+    }
+    out = out.replace(/https?:\/\/t\.co\/[A-Za-z0-9]+/g, "");
+    out = out.replace(/https?:\/\/pic\.(?:twitter|x)\.com\/[A-Za-z0-9]+/g, "");
+    out = out.replace(
+      /https?:\/\/(?:www\.)?(?:x|twitter)\.com\/[^/\s]+\/status\/\d+\/(?:photo|video|analytics)(?:\/\d+)?/gi,
+      ""
+    );
+    out = out.replace(
+      /(?:https?:\/\/)?(?:www\.)?[A-Za-z0-9][A-Za-z0-9.-]*\.[A-Za-z]{2,}[^\s]*?(?:…|\.{3})/g,
+      ""
+    );
+    out = out.replace(/[ \t]+\n/g, "\n").replace(/[ \t]{2,}/g, " ");
+    out = out.replace(/[ \t]+([.,;:!?])/g, "$1");
+    return out.trim();
+  }
+
+  function isXChromeLink(href) {
+    try {
+      var path = new URL(href, location.href).pathname;
+      if (/^\/[A-Za-z0-9_]+\/?$/.test(path)) return true;
+      if (path.indexOf("/hashtag/") === 0) return true;
+      if (path.indexOf("/search") === 0) return true;
+      if (path.indexOf("cashtag") !== -1) return true;
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function resolvedXLinkText(a) {
+    var href = a.getAttribute("href") || "";
+    var visible = ((a.innerText || a.textContent || "") + "").trim();
+    if (!href) return visible;
+    if (isXChromeLink(href)) return visible;
+    var dataExp = a.getAttribute("data-expanded-url") || "";
+    var titleAttr = a.getAttribute("title") || "";
+    var abs = href;
+    try {
+      abs = new URL(href, location.href).href;
+    } catch (e) {}
+    var cands = [dataExp, titleAttr, abs];
+    for (var i = 0; i < cands.length; i++) {
+      if (/^https?:\/\//i.test(cands[i])) return cands[i];
+    }
+    return visible;
+  }
+
+  function serializeXRichText(el) {
+    if (!el) return "";
+    var links = el.querySelectorAll("a[href]");
+    if (!links.length) return ((el.innerText || "") + "").trim();
+    var clone = el.cloneNode(true);
+    var clonedLinks = clone.querySelectorAll("a[href]");
+    for (var i = 0; i < clonedLinks.length; i++) {
+      var label = resolvedXLinkText(clonedLinks[i]);
+      var node = document.createTextNode(label);
+      clonedLinks[i].parentNode.replaceChild(node, clonedLinks[i]);
+    }
+    return ((clone.innerText || "") + "").trim();
+  }
+
   function textFromXArticle(article) {
     var longForm =
       article.querySelector('[data-testid="twitterArticleRichTextView"]') ||
       article.querySelector('[data-testid="article-detail"]') ||
       article.querySelector('div[data-testid="card.layoutLarge.detail"]');
-    var longText =
-      (longForm && longForm.innerText && longForm.innerText.trim()) || "";
+    var longText = serializeXRichText(longForm);
     if (longText.length > 80) return longText;
 
     var nodes = article.querySelectorAll('[data-testid="tweetText"]');
     var parts = [];
     for (var i = 0; i < nodes.length; i++) {
       if (nodes[i].closest("article") !== article) continue;
-      var t = (nodes[i].innerText && nodes[i].innerText.trim()) || "";
+      var t = serializeXRichText(nodes[i]);
       if (t) parts.push(t);
     }
     return parts.join("\n\n");
@@ -299,8 +460,16 @@ function extractPageData() {
       }
     }
 
+    refreshXUrlMaps();
     var numbered = assembleNumberedThread(numberedItems);
-    if (numbered.length > 1) return numbered;
+    if (numbered.length > 1) {
+      var cleanedNumbered = [];
+      for (var ni = 0; ni < numbered.length; ni++) {
+        var nt = rewriteXPostLinks(numbered[ni]);
+        if (nt) cleanedNumbered.push(nt);
+      }
+      return cleanedNumbered;
+    }
 
     var rootMs = snowflakeMs(statusId);
     var WINDOW_MS = 2 * 60 * 60 * 1000;
@@ -337,29 +506,33 @@ function extractPageData() {
     }
     var parts = [];
     for (var p = start; p <= end; p++) {
-      if (harvested[cluster[p]]) parts.push(harvested[cluster[p]]);
+      if (harvested[cluster[p]]) {
+        var pt = rewriteXPostLinks(harvested[cluster[p]]);
+        if (pt) parts.push(pt);
+      }
     }
     return parts;
   }
 
   function xPostText() {
     if (!isXPost()) return "";
+    refreshXUrlMaps();
 
     var path = location.pathname.match(/^\/([^/]+)\/status\/(\d+)/);
     if (path) {
       var parts = assembleXThread(path[1], path[2]);
-      if (parts.length > 1) return parts.join("\n\n");
-      if (parts.length === 1) return parts[0];
+      if (parts.length > 1) return rewriteXPostLinks(parts.join("\n\n"));
+      if (parts.length === 1) return rewriteXPostLinks(parts[0]);
     }
 
     var firsts = topLevelXArticles();
     var firstArticle = firsts[0] || document.querySelector("article");
     if (firstArticle) {
-      var text = textFromXArticle(firstArticle);
+      var text = rewriteXPostLinks(textFromXArticle(firstArticle));
       if (text) return text;
     }
     var first = document.querySelector('[data-testid="tweetText"]');
-    return (first && first.innerText && first.innerText.trim()) || "";
+    return rewriteXPostLinks(serializeXRichText(first));
   }
 
   function quoraAnswerText() {
@@ -469,6 +642,10 @@ function extractPageData() {
     meta('meta[name="twitter:title"]') ||
     document.title ||
     "Untitled").trim();
+  if (isXPost()) {
+    refreshXUrlMaps();
+    title = rewriteXPostLinks(title) || title;
+  }
 
   var siteName = (meta('meta[property="og:site_name"]') || hostname()).trim();
 
@@ -515,14 +692,14 @@ function extractPageData() {
         : articleEl.innerText.trim().slice(0, EXCERPT_MAX);
   }
 
-  var excerpt = normalizeExcerpt(
-    selection ||
-      xPostText() ||
-      quoraAnswerText() ||
-      jsonLdArticleBody() ||
-      articleExcerpt ||
-      metaDescription
-  ).slice(0, EXCERPT_MAX);
+  var rawExcerpt =
+    (isXPost() && selection ? rewriteXPostLinks(selection) : selection) ||
+    xPostText() ||
+    quoraAnswerText() ||
+    jsonLdArticleBody() ||
+    articleExcerpt ||
+    metaDescription;
+  var excerpt = normalizeExcerpt(rawExcerpt).slice(0, EXCERPT_MAX);
 
   return {
     title: title,
