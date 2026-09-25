@@ -3,13 +3,53 @@
   <head>
     <meta charset="UTF-8" />
     <title>Opening OmniFocus…</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --paper: #f7f4ef;
+        --ink: #1f1a17;
+        --ink-soft: #5f574f;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --paper: #1f1b18;
+          --ink: #f1ece6;
+          --ink-soft: #b3aaa0;
+        }
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 16px;
+        box-sizing: border-box;
+        background: var(--paper);
+        color: var(--ink);
+        font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+      }
+      main {
+        max-width: 28rem;
+      }
+      h1 {
+        font-size: 1.25rem;
+        margin: 0 0 0.5rem;
+      }
+      p {
+        margin: 0;
+        color: var(--ink-soft);
+      }
+    </style>
   </head>
   <body>
-    <script>
-      const target = new URLSearchParams(location.search).get("target");
-      if (target && target.startsWith("omnifocus://")) {
-        location.replace(target);
-      }
-    </script>
+    <!-- Only visible on the first clip, before Chrome remembers the choice. -->
+    <main>
+      <h1>Opening OmniFocus…</h1>
+      <p>
+        If Chrome asks to open OmniFocus, tick <strong>Always allow</strong> and
+        click <strong>Open OmniFocus</strong>. You’ll only be asked once.
+      </p>
+    </main>
+    <script src="src/handoff.js"></script>
   </body>
 </html>
