@@ -5,7 +5,12 @@ All notable changes to Web Clipper for OmniFocus are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project uses [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [1.1.0] — 2026-09-25
+
+### Fixed
+
+- **Clipping without the native helper always failed** with “Couldn't open OmniFocus” (every Chrome Web Store install that hadn't set up the helper). The handoff page's inline script was blocked by MV3's extension CSP, so it never navigated to OmniFocus; it now loads from `src/handoff.js`. The first handoff also runs in a visible tab so Chrome's “Open OmniFocus?” prompt can be seen and answered (it's tab-modal, and was hidden in a background tab); once it succeeds, later handoffs run hidden again. Success is now detected by OmniFocus taking focus, since `tab.url` is unreadable without the `tabs` permission.
+- **Clicking a clip notification without the native helper** opened OmniFocus to an “Invalid URL” alert (bare `omnifocus:///`); it now opens the Inbox perspective.
 
 ### Added
 

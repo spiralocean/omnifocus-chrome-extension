@@ -8,7 +8,11 @@ import { OMNIFOCUS_HANDOFF_FAILED } from "./platform.js";
 const NATIVE_HOST = "com.spiralocean.clip_to_omnifocus";
 
 const HANDOFF_TIMEOUT_MS = 4000;
-const HANDOFF_POLL_MS = 250;
+// Until the first handoff succeeds, Chrome asks "Open OmniFocus?" inside the
+// handoff tab. The prompt only renders in the active tab, so that first
+// handoff is shown and the user is given time to answer it.
+const FIRST_HANDOFF_TIMEOUT_MS = 60000;
+const HANDOFF_CONFIRMED_KEY = "omnifocusHandoffConfirmed";
 // macOS activates OmniFocus when the URL scheme opens; wait for that
 // to land before pulling focus back, or OmniFocus wins the race.
 const REFOCUS_DELAY_MS = 450;
@@ -33,18 +37,6 @@ function sleep(ms) {
 
 /**
  * @param {number} tabId
- * @returns {Promise<chrome.tabs.Tab | null>}
- */
-function getTab(tabId) {
-  return new Promise((resolve) => {
-    chrome.tabs.get(tabId, (tab) => {
-      resolve(chrome.runtime.lastError ? null : tab ?? null);
-    });
-  });
-}
-
-/**
- * @param {number} tabId
  * @returns {Promise<void>}
  */
 function removeTab(tabId) {
@@ -57,28 +49,68 @@ function removeTab(tabId) {
 }
 
 /**
- * Poll the handoff tab until Chrome reports an outcome instead of
- * blocking for the full timeout:
- * - the omnifocus:// URL committing means the handoff succeeded
- * - a chrome-error:// interstitial means no protocol handler
- * - still sitting on handoff.html at the deadline counts as failure
+ * Wait for OmniFocus to take focus from Chrome, which is the one sign of a
+ * successful handoff visible without the `tabs` permission (tab.url stays
+ * unset, and an external-protocol navigation never commits anyway). The tab
+ * closing first, or the deadline passing, counts as failure.
  *
  * @param {number} tabId
+ * @param {number} timeoutMs
  * @returns {Promise<boolean>} whether the handoff succeeded
  */
-async function waitForHandoffOutcome(tabId) {
-  for (let elapsed = 0; elapsed < HANDOFF_TIMEOUT_MS; elapsed += HANDOFF_POLL_MS) {
-    await sleep(HANDOFF_POLL_MS);
+function waitForHandoffOutcome(tabId, timeoutMs) {
+  return new Promise((resolve) => {
+    const finish = (succeeded) => {
+      clearTimeout(timer);
+      chrome.windows.onFocusChanged.removeListener(onFocusChanged);
+      chrome.tabs.onRemoved.removeListener(onRemoved);
+      resolve(succeeded);
+    };
+    const onFocusChanged = (windowId) => {
+      if (windowId === chrome.windows.WINDOW_ID_NONE) finish(true);
+    };
+    const onRemoved = (removedId) => {
+      if (removedId === tabId) finish(false);
+    };
+    const timer = setTimeout(() => finish(false), timeoutMs);
+    chrome.windows.onFocusChanged.addListener(onFocusChanged);
+    chrome.tabs.onRemoved.addListener(onRemoved);
+  });
+}
 
-    const tab = await getTab(tabId);
-    if (!tab) return true;
-
-    const url = tab.url || "";
-    if (url.startsWith("chrome-error://")) return false;
-    if (url.startsWith("omnifocus://")) return true;
+/**
+ * @returns {Promise<boolean>}
+ */
+async function isHandoffConfirmed() {
+  try {
+    const stored = await chrome.storage.local.get(HANDOFF_CONFIRMED_KEY);
+    return stored[HANDOFF_CONFIRMED_KEY] === true;
+  } catch {
+    return false;
   }
+}
 
-  return false;
+/**
+ * @param {boolean} confirmed
+ * @returns {Promise<void>}
+ */
+async function setHandoffConfirmed(confirmed) {
+  try {
+    await chrome.storage.local.set({ [HANDOFF_CONFIRMED_KEY]: confirmed });
+  } catch {
+    // Worst case the next clip shows the handoff tab again.
+  }
+}
+
+/**
+ * @returns {Promise<chrome.tabs.Tab | null>}
+ */
+function getActiveTab() {
+  return new Promise((resolve) => {
+    chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
+      resolve(chrome.runtime.lastError ? null : tabs?.[0] ?? null);
+    });
+  });
 }
 
 /**
@@ -161,6 +193,10 @@ export async function openOmniFocusUrl(ofUrl, options = {}) {
     return;
   }
 
+  // Once "Always allow" is ticked the handoff can run in a hidden tab. Until
+  // then, a hidden tab would swallow Chrome's prompt and always time out.
+  const confirmed = await isHandoffConfirmed();
+
   const previousWindow = options.returnFocus
     ? await new Promise((resolve) => {
         chrome.windows.getLastFocused((win) => {
@@ -168,25 +204,42 @@ export async function openOmniFocusUrl(ofUrl, options = {}) {
         });
       })
     : null;
+  const previousTab = confirmed ? null : await getActiveTab();
 
   const tab = await new Promise((resolve, reject) => {
-    chrome.tabs.create({ url: buildHandoffPageUrl(ofUrl), active: false }, (created) => {
-      if (chrome.runtime.lastError || !created?.id) {
-        reject(
-          new Error(chrome.runtime.lastError?.message || "Could not open OmniFocus.")
-        );
-        return;
+    chrome.tabs.create(
+      { url: buildHandoffPageUrl(ofUrl), active: !confirmed },
+      (created) => {
+        if (chrome.runtime.lastError || !created?.id) {
+          reject(
+            new Error(chrome.runtime.lastError?.message || "Could not open OmniFocus.")
+          );
+          return;
+        }
+        resolve(created);
       }
-      resolve(created);
-    });
+    );
   });
 
-  const succeeded = await waitForHandoffOutcome(tab.id);
+  const succeeded = await waitForHandoffOutcome(
+    tab.id,
+    confirmed ? HANDOFF_TIMEOUT_MS : FIRST_HANDOFF_TIMEOUT_MS
+  );
   await removeTab(tab.id);
 
+  if (previousTab?.id !== undefined) {
+    chrome.tabs.update(previousTab.id, { active: true }, () => {
+      void chrome.runtime.lastError;
+    });
+  }
+
   if (!succeeded) {
+    // Chrome may have forgotten "Always allow"; show the prompt next time.
+    if (confirmed) await setHandoffConfirmed(false);
     throw new Error(OMNIFOCUS_HANDOFF_FAILED);
   }
+
+  if (!confirmed) await setHandoffConfirmed(true);
 
   if (previousWindow?.id !== undefined) {
     await sleep(REFOCUS_DELAY_MS);
@@ -215,5 +268,7 @@ export async function openClippedTask(taskName) {
     }
   }
 
-  await openOmniFocusUrl("omnifocus:///", { returnFocus: false });
+  // A bare omnifocus:/// makes OmniFocus show an "Invalid URL" alert; the
+  // Inbox perspective is where an unassigned clip lands anyway.
+  await openOmniFocusUrl("omnifocus:///perspective/Inbox", { returnFocus: false });
 }

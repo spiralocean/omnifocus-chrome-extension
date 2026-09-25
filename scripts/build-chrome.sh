@@ -31,6 +31,7 @@ FILES=(
   icons/icon48.png
   icons/icon128.png
   src/extract-page.js
+  src/handoff.js
   src/notifications.js
   src/omnifocus.js
   src/open-omnifocus.js
