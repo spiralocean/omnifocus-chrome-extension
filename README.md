@@ -45,9 +45,10 @@ from the Chrome Web Store — one click, and it auto-updates.
 
 #### Optional: flash-free background open
 
-Out of the box, clipping uses a hidden handoff tab, which may briefly flash
-OmniFocus forward. To eliminate that entirely, install the native helper, which
-opens the URL with `open -g` (background):
+Out of the box, clipping uses a handoff tab. On the first clip Chrome asks
+**Open OmniFocus?** — tick **Always allow** and click **Open OmniFocus**; after
+that the tab runs hidden, though it may briefly flash OmniFocus forward. To skip
+both, install the native helper, which opens the URL with `open -g` (background):
 
 ```sh
 # Chrome Web Store install — the extension ID is fixed:
@@ -101,7 +102,8 @@ Clips are delivered to OmniFocus via its `omnifocus://` URL scheme:
 
 - **Chrome/Brave** send the URL through a native messaging host
   ([`native-host/host.py`](native-host/host.py)) that runs `open -g`, or fall
-  back to a hidden handoff tab if the host isn't installed.
+  back to a handoff tab if the host isn't installed (visible until Chrome's
+  one-time "Open OmniFocus?" prompt is allowed, hidden after).
 - **Safari** routes the URL to the container app's `SafariWebExtensionHandler`,
   which calls `NSWorkspace.open` with `activates: false`.
 

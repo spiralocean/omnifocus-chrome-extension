@@ -7,11 +7,6 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ## [1.1.0] — 2026-09-25
 
-### Fixed
-
-- **Clipping without the native helper always failed** with “Couldn't open OmniFocus” (every Chrome Web Store install that hadn't set up the helper). The handoff page's inline script was blocked by MV3's extension CSP, so it never navigated to OmniFocus; it now loads from `src/handoff.js`. The first handoff also runs in a visible tab so Chrome's “Open OmniFocus?” prompt can be seen and answered (it's tab-modal, and was hidden in a background tab); once it succeeds, later handoffs run hidden again. Success is now detected by OmniFocus taking focus, since `tab.url` is unreadable without the `tabs` permission.
-- **Clicking a clip notification without the native helper** opened OmniFocus to an “Invalid URL” alert (bare `omnifocus:///`); it now opens the Inbox perspective.
-
 ### Added
 
 - **Clip confirmation notification** — after a successful clip (toolbar, keyboard shortcut, or context menu), show a local “Clipped to OmniFocus” toast with the task name. Failures degrade silently so a broken notification path never undoes a successful handoff. These are browser toasts (not macOS Notification Center).
@@ -20,6 +15,8 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- **Clipping without the native helper always failed** with “Couldn't open OmniFocus” (every Chrome Web Store install that hadn't set up the helper). The handoff page's inline script was blocked by MV3's extension CSP, so it never navigated to OmniFocus; it now loads from `src/handoff.js`. The first handoff also runs in a visible tab so Chrome's “Open OmniFocus?” prompt can be seen and answered (it's tab-modal, and was hidden in a background tab); once it succeeds, later handoffs run hidden again. Success is now detected by OmniFocus taking focus, since `tab.url` is unreadable without the `tabs` permission.
+- **Clicking a clip notification without the native helper** opened OmniFocus to an “Invalid URL” alert (bare `omnifocus:///`); it now opens the Inbox perspective.
 - **Line breaks in clipped notes** — excerpt cleanup no longer flattens all whitespace into a single line (multi-line X posts, YouTube descriptions, and article paragraphs keep their carriage returns). On X/Twitter, prefer the live tweet text over meta tags, which drop newlines.
 - **Shallow clips (e.g. Quora)** — prefer live article/answer text over short meta teasers; fill the note budget with more than three paragraphs; Quora uses answer-body selectors (`.q-text` / answer containers) and JSON-LD when present.
 - **Long X posts cut off** — note/excerpt budget raised from 1200 → 8000 characters; note composition always keeps the source URL and only trims the body; X extraction also reads long-form article bodies when present.
