@@ -725,14 +725,36 @@ export async function extractPageData() {
   /**
    * X virtualizes the conversation: only a few posts stay mounted. Scroll the
    * timeline and copy each same-author card into harvestedXTexts as it appears
-   * so unmounting does not drop earlier posts. Stop when the harvest size
-   * (monotonic) stops growing — not when the current viewport stops growing.
+   * so unmounting does not drop earlier posts.
+   *
+   * A multi-post sits directly under the first post, before anyone else's
+   * replies — so stop at the first post by someone else below it instead of
+   * trawling the comments (the same rule as the Seeds clipper). Otherwise stop
+   * when the harvest size stops growing.
    */
   async function loadFullXThread() {
     if (!isXPost()) return;
-    const path = location.pathname.match(/^\/([^/]+)\/status\/\d+/);
+    const path = location.pathname.match(/^\/([^/]+)\/status\/(\d+)/);
     if (!path) return;
     const handle = path[1];
+    const handleLc = handle.toLowerCase();
+    const focalId = path[2];
+    let sawFocal = false;
+
+    /** True once a post by someone else follows the author's run. */
+    const runEnded = () => {
+      const articles = topLevelXArticles();
+      let focalIndex = -1;
+      articles.forEach((a, i) => {
+        if (statusIdFromXArticle(a) === focalId) focalIndex = i;
+      });
+      if (focalIndex >= 0) sawFocal = true;
+      if (!sawFocal) return false;
+      for (let j = focalIndex + 1; j < articles.length; j++) {
+        if ((authorHandleFromXArticle(articles[j]) || "").toLowerCase() !== handleLc) return true;
+      }
+      return false;
+    };
 
     const sleepMs = 350;
     const maxPasses = 80;
@@ -778,6 +800,7 @@ export async function extractPageData() {
       if (next <= prev) stable++;
       else stable = 0;
       prev = next;
+      if (runEnded()) break;
       if (stable >= 6 && next >= 1) break;
     }
 
@@ -799,6 +822,8 @@ export async function extractPageData() {
       const parts = assembleXThread(path[1], path[2]);
       if (parts.length > 1) return rewriteXPostLinks(parts.join("\n\n"));
       if (parts.length === 1) return rewriteXPostLinks(parts[0]);
+      // The post has no text (a picture or video post): say so — never borrow a reply's.
+      return "";
     }
 
     // Profile / home / timeline: first visible top-level tweet body.
@@ -983,14 +1008,16 @@ export async function extractPageData() {
 
   // Prefer live / structured bodies over meta tags. Meta is often a short
   // teaser (Quora, news sites) and used to win over the real article text.
+  // On an X post page the post's own text is the excerpt, even when it's empty — the
+  // article / meta fallbacks there are replies and X's page chrome.
+  const onXStatus = isXPost() && /^\/[^/]+\/status\/\d+/.test(location.pathname);
   const rawExcerpt =
     (isXPost() && selection ? rewriteXPostLinks(selection) : selection) ||
     youTubeDescription() ||
     xPostText() ||
-    quoraAnswerText() ||
-    jsonLdArticleBody() ||
-    articleExcerpt ||
-    metaDescription;
+    (onXStatus
+      ? ""
+      : quoraAnswerText() || jsonLdArticleBody() || articleExcerpt || metaDescription);
   const excerpt = normalizeExcerpt(rawExcerpt).slice(0, EXCERPT_MAX);
 
   return {

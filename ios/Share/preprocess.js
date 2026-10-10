@@ -523,6 +523,8 @@ function extractPageData() {
       var parts = assembleXThread(path[1], path[2]);
       if (parts.length > 1) return rewriteXPostLinks(parts.join("\n\n"));
       if (parts.length === 1) return rewriteXPostLinks(parts[0]);
+      // The post has no text (a picture or video post): say so — never borrow a reply's.
+      return "";
     }
 
     var firsts = topLevelXArticles();
@@ -692,13 +694,15 @@ function extractPageData() {
         : articleEl.innerText.trim().slice(0, EXCERPT_MAX);
   }
 
+  // On an X post page the post's own text is the excerpt, even when it's empty — the
+  // article / meta fallbacks there are replies and X's page chrome.
+  var onXStatus = isXPost() && /^\/[^/]+\/status\/\d+/.test(location.pathname);
   var rawExcerpt =
     (isXPost() && selection ? rewriteXPostLinks(selection) : selection) ||
     xPostText() ||
-    quoraAnswerText() ||
-    jsonLdArticleBody() ||
-    articleExcerpt ||
-    metaDescription;
+    (onXStatus
+      ? ""
+      : quoraAnswerText() || jsonLdArticleBody() || articleExcerpt || metaDescription);
   var excerpt = normalizeExcerpt(rawExcerpt).slice(0, EXCERPT_MAX);
 
   return {
