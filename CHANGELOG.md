@@ -5,6 +5,13 @@ All notable changes to Web Clipper for OmniFocus are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project uses [Semantic Versioning](https://semver.org/).
 
+## [1.1.1] — 2026-10-10
+
+### Fixed
+
+- **Picture and video posts on X** — a post with no text now clips with an empty note instead of borrowing the first reply’s text (e.g. “@grok …”). On X post pages the article / meta-description fallbacks (replies and X’s page chrome) are no longer used.
+- **Slow X thread clips** — thread loading stops at the first post by someone else below the author’s run instead of scrolling through the comments until nothing new appears (slow on busy posts, and it picked up the author’s replies to commenters).
+
 ## [1.1.0] — 2026-09-25
 
 ### Added
