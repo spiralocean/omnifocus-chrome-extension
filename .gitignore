@@ -21,3 +21,8 @@ icons/source/preview-256.png
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# fastlane
+fastlane/report.xml
+fastlane/README.md
+fastlane/test_output/

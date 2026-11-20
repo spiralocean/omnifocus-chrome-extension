@@ -1,0 +1,18 @@
+default_platform(:ios)
+
+def release_config
+  {
+    project: File.expand_path("../safari/Clip to OmniFocus/Clip to OmniFocus.xcodeproj", __dir__),
+    scheme: "Clip to OmniFocus (macOS)",
+    target: "Clip to OmniFocus (macOS)",
+    bundle_ids: ["com.spiralocean.cliptoomnifocus", "com.spiralocean.cliptoomnifocus.Extension"],
+    root: File.expand_path("..", __dir__),
+    mac_scheme: "Clip to OmniFocus (macOS)",
+    mac_target: "Clip to OmniFocus (macOS)",
+    # The Safari extension needs no profile (sandbox and user-selected-files only).
+    mac_profile_ids: ["com.spiralocean.cliptoomnifocus"],
+    automatic_release: true,
+  }
+end
+
+import File.expand_path("~/release-kit/Fastfile")
