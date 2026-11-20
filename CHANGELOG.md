@@ -5,6 +5,12 @@ All notable changes to Web Clipper for OmniFocus are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project uses [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- **Dark mode** — the clipper popup and settings page follow the system appearance.
+
 ## [1.1.1] — 2026-10-10
 
 ### Fixed

@@ -1,16 +1,69 @@
 :root {
-  color-scheme: light;
+  color-scheme: light dark;
   --paper: #f7f4ef;
   --paper-deep: #efe9df;
+  --page-top: #faf7f2;
   --ink: #1f1a17;
   --ink-soft: #5f574f;
   --accent: #5b4b8a;
   --accent-deep: #46386f;
   --accent-soft: #ebe6f4;
+  --accent-glow: rgba(91, 75, 138, 0.12);
+  --accent-line: rgba(91, 75, 138, 0.12);
+  --accent-border: rgba(91, 75, 138, 0.2);
+  --accent-fill: rgba(91, 75, 138, 0.08);
+  --focus-border: rgba(91, 75, 138, 0.45);
+  --focus-ring: 0 0 0 3px rgba(91, 75, 138, 0.12);
+  --mark-from: #5b4b8a;
+  --mark-to: #46386f;
   --line: #ddd4c8;
   --success: #2f6b4f;
+  --error: #9b3d3d;
   --shadow: 0 18px 40px rgba(47, 34, 24, 0.12);
+  --button-shadow: 0 10px 24px rgba(91, 75, 138, 0.28);
+  --button-shadow-hover: 0 14px 28px rgba(91, 75, 138, 0.34);
+  --surface: rgba(255, 255, 255, 0.72);
+  --surface-border: rgba(255, 255, 255, 0.8);
+  --header-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(247, 244, 239, 0.65));
+  --input-bg: rgba(255, 255, 255, 0.88);
+  --kbd-bg: #fff;
+  --preview-bg: rgba(255, 255, 255, 0.6);
+  --on-accent: #fff;
   --radius: 14px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #1c1916;
+    --paper-deep: #141210;
+    --page-top: #2a241f;
+    --ink: #f3eee8;
+    --ink-soft: #b7aea4;
+    --accent: #c9b8ee;
+    --accent-deep: #e6dff8;
+    --accent-soft: #3a3348;
+    --accent-glow: rgba(168, 148, 212, 0.2);
+    --accent-line: rgba(201, 184, 238, 0.24);
+    --accent-border: rgba(201, 184, 238, 0.34);
+    --accent-fill: rgba(168, 148, 212, 0.16);
+    --focus-border: rgba(201, 184, 238, 0.75);
+    --focus-ring: 0 0 0 3px rgba(168, 148, 212, 0.28);
+    --mark-from: #8d78c6;
+    --mark-to: #5c4b8e;
+    --line: #3d352e;
+    --success: #8fceaa;
+    --error: #f0a8a4;
+    --shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+    --button-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+    --button-shadow-hover: 0 14px 28px rgba(0, 0, 0, 0.5);
+    --surface: rgba(38, 33, 29, 0.94);
+    --surface-border: rgba(255, 244, 230, 0.1);
+    --header-bg: linear-gradient(180deg, rgba(52, 45, 40, 0.96), rgba(28, 25, 22, 0.72));
+    --input-bg: #161310;
+    --kbd-bg: #2c2622;
+    --preview-bg: rgba(16, 14, 12, 0.55);
+    --on-accent: #fff;
+  }
 }
 
 * {
@@ -22,8 +75,8 @@ body {
   margin: 0;
   min-width: 360px;
   background:
-    radial-gradient(circle at top right, rgba(91, 75, 138, 0.12), transparent 42%),
-    linear-gradient(180deg, #faf7f2 0%, var(--paper) 100%);
+    radial-gradient(circle at top right, var(--accent-glow), transparent 42%),
+    linear-gradient(180deg, var(--page-top) 0%, var(--paper) 100%);
   color: var(--ink);
   font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
@@ -33,8 +86,8 @@ body {
 }
 
 .clipper {
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
   border-radius: calc(var(--radius) + 4px);
   box-shadow: var(--shadow);
   overflow: hidden;
@@ -48,7 +101,7 @@ body {
   align-items: center;
   padding: 12px 14px 10px;
   border-bottom: 1px solid var(--line);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(247, 244, 239, 0.65));
+  background: var(--header-bg);
 }
 
 .clipper__mark {
@@ -57,8 +110,8 @@ body {
   width: 36px;
   height: 36px;
   border-radius: 10px;
-  background: linear-gradient(145deg, var(--accent), var(--accent-deep));
-  color: #fff;
+  background: linear-gradient(145deg, var(--mark-from), var(--mark-to));
+  color: var(--on-accent);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
@@ -94,7 +147,7 @@ body {
 
 .clipper__settings:hover {
   background: var(--accent-soft);
-  border-color: rgba(91, 75, 138, 0.12);
+  border-color: var(--accent-line);
   color: var(--accent-deep);
 }
 
@@ -123,7 +176,7 @@ body {
   padding: 1px 5px;
   border: 1px solid var(--line);
   border-radius: 5px;
-  background: #fff;
+  background: var(--kbd-bg);
   font-size: 11px;
   text-align: center;
 }
@@ -146,7 +199,7 @@ body {
   width: 100%;
   border: 1px solid var(--line);
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.88);
+  background: var(--input-bg);
   color: var(--ink);
   font: inherit;
   transition: border-color 140ms ease, box-shadow 140ms ease;
@@ -170,8 +223,8 @@ body {
 .field__input:focus,
 .field__textarea:focus {
   outline: none;
-  border-color: rgba(91, 75, 138, 0.45);
-  box-shadow: 0 0 0 3px rgba(91, 75, 138, 0.12);
+  border-color: var(--focus-border);
+  box-shadow: var(--focus-ring);
 }
 
 .field-row {
@@ -205,14 +258,14 @@ body {
 }
 
 .button--primary {
-  color: #fff;
-  background: linear-gradient(145deg, var(--accent), var(--accent-deep));
-  box-shadow: 0 10px 24px rgba(91, 75, 138, 0.28);
+  color: var(--on-accent);
+  background: linear-gradient(145deg, var(--mark-from), var(--mark-to));
+  box-shadow: var(--button-shadow);
 }
 
 .button--primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 14px 28px rgba(91, 75, 138, 0.34);
+  box-shadow: var(--button-shadow-hover);
 }
 
 .button--primary:active {
@@ -227,8 +280,8 @@ body {
 
 .button--ghost {
   color: var(--accent-deep);
-  background: rgba(91, 75, 138, 0.08);
-  border: 1px solid rgba(91, 75, 138, 0.2);
+  background: var(--accent-fill);
+  border: 1px solid var(--accent-border);
 }
 
 .button--ghost:hover {
@@ -242,7 +295,7 @@ body {
   padding: 12px;
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.6);
+  background: var(--preview-bg);
 }
 
 .preview__lead {
@@ -299,5 +352,5 @@ body {
 }
 
 .clipper__status.is-error {
-  color: #9b3d3d;
+  color: var(--error);
 }
